@@ -1,5 +1,6 @@
 ---
 import ThemeInit from '../../components/ThemeInit.astro';
+import TerminalCursor from '../../components/TerminalCursor.astro';
 import ThemeToggle from '../../components/ThemeToggle.astro';
 import Logo from '../../components/Logo.astro';
 import BrandHead from '../../components/BrandHead.astro';
@@ -116,5 +117,6 @@ const languages: ProjectLanguage[] = ['en', 'es'];
 			updateLanguage(initialLanguage);
 			document.querySelectorAll('[data-language]').forEach((button) => button.addEventListener('click', () => updateLanguage(button.dataset.language, true)));
 		</script>
+		<TerminalCursor />
 	</body>
 </html>

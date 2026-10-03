@@ -1,0 +1,67 @@
+<div class="term-cursor" data-term-cursor data-mode="hidden" aria-hidden="true">
+	<svg class="term-cursor-arrow" viewBox="0 0 13 20" width="13" height="20"><path d="M1 1v16l4-4 3 6 3-1.5-3-6h5.5z" /></svg>
+	<span class="term-cursor-beam"></span>
+	<span class="term-cursor-label" data-term-cursor-label></span>
+</div>
+
+<script>
+	// Mouse/trackpad only: touch devices keep their native behaviour.
+	const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+	const cursor = document.querySelector<HTMLElement>('[data-term-cursor]');
+	const label = document.querySelector<HTMLElement>('[data-term-cursor-label]');
+
+	const copy = {
+		en: { open: 'OPEN ↗', go: 'GO', run: 'RUN', send: 'RETURN ↵' },
+		es: { open: 'ABRIR ↗', go: 'IR', run: 'EJECUTAR', send: 'ENVIAR ↵' }
+	};
+	const interactive = 'a, button, [role="button"], label[for], summary, select';
+	const textual = 'textarea, input:not([type="checkbox"], [type="radio"], [type="submit"], [type="button"])';
+
+	// Elements can set data-cursor="LABEL" to override, or data-cursor="none" to hide the custom cursor.
+	const actionFor = (target: Element) => {
+		const text = /^es/i.test(document.documentElement.lang) ? copy.es : copy.en;
+		const custom = target.closest<HTMLElement>('[data-cursor]')?.dataset.cursor;
+		if (custom) return custom;
+		if (target instanceof HTMLButtonElement && target.type === 'submit') return text.send;
+		if (target instanceof HTMLAnchorElement) {
+			const href = target.getAttribute('href') ?? '';
+			return target.target === '_blank' || /^https?:/.test(href) ? text.open : text.go;
+		}
+		return text.run;
+	};
+
+	if (cursor && label && fine.matches) {
+		document.documentElement.classList.add('has-term-cursor');
+		let frame = 0;
+		let x = 0;
+		let y = 0;
+
+		const render = () => {
+			frame = 0;
+			cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+		};
+
+		document.addEventListener('pointermove', (event) => {
+			if (event.pointerType !== 'mouse') return;
+			x = event.clientX;
+			y = event.clientY;
+			if (!frame) frame = requestAnimationFrame(render);
+
+			const target = event.target instanceof Element ? event.target : null;
+			const hit = target?.closest(interactive);
+			const disabled = hit instanceof HTMLButtonElement && hit.disabled;
+			let mode = 'idle';
+			if (!target || target.closest('[data-cursor="none"], [data-portrait-stage], iframe')) mode = 'hidden';
+			else if (target.closest(textual)) mode = 'text';
+			else if (hit && !disabled) mode = 'action';
+
+			cursor.dataset.mode = mode;
+			if (mode === 'action' && hit) label.textContent = `[ ${actionFor(hit)} ]`;
+		});
+
+		// The Turnstile widget is an iframe: pointer events stop there, so hide instead of freezing.
+		document.addEventListener('pointerout', (event) => { if (!event.relatedTarget) cursor.dataset.mode = 'hidden'; });
+		document.addEventListener('pointerdown', () => { cursor.dataset.pressed = ''; });
+		document.addEventListener('pointerup', () => { delete cursor.dataset.pressed; });
+	}
+</script>

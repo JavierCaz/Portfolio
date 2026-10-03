@@ -1,5 +1,6 @@
 ---
 import ThemeInit from '../components/ThemeInit.astro';
+import TerminalCursor from '../components/TerminalCursor.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import Logo from '../components/Logo.astro';
 import BrandHead from '../components/BrandHead.astro';
@@ -217,5 +218,6 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 				}
 			});
 		</script>
+		<TerminalCursor />
 	</body>
 </html>

@@ -449,7 +449,22 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 	.article-intro p, .article-section p, .article-section li { font-size: 11px; }
 	.article-footer { align-items: flex-start; flex-direction: column; }
 }
-@media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+.term-cursor { position: fixed; top: 0; left: 0; z-index: 1000; pointer-events: none; display: none; }
+.has-term-cursor .term-cursor:not([data-mode="hidden"]) { display: block; }
+.has-term-cursor, .has-term-cursor * { cursor: none !important; }
+.has-term-cursor [data-portrait-stage], .has-term-cursor [data-portrait-stage] * { cursor: crosshair !important; }
+.has-term-cursor iframe { cursor: auto !important; }
+.term-cursor-arrow { position: absolute; top: -1px; left: -1px; display: block; overflow: visible; filter: drop-shadow(2px 2px 0 var(--green-shadow)); }
+.term-cursor-arrow path { fill: var(--green-fill); stroke: var(--bg); stroke-width: 1.2; stroke-linejoin: miter; }
+.term-cursor-beam { position: absolute; top: -9px; left: 0; display: none; width: 2px; height: 18px; background: var(--green-fill); outline: 1px solid var(--bg); animation: blink 1.05s steps(2, start) infinite; }
+.term-cursor-label { position: absolute; top: 18px; left: 14px; display: none; padding: 4px 6px; border: 1px solid var(--green-fill); background: var(--green-fill); color: var(--on-green); font-size: 9px; font-weight: 700; letter-spacing: .06em; line-height: 1.2; white-space: nowrap; box-shadow: 3px 3px 0 var(--green-shadow); }
+.term-cursor[data-mode="action"] .term-cursor-label { display: block; }
+.term-cursor[data-mode="text"] .term-cursor-arrow { display: none; }
+.term-cursor[data-mode="text"] .term-cursor-beam { display: block; }
+.term-cursor[data-pressed] .term-cursor-arrow { translate: 1px 1px; filter: none; }
+.term-cursor[data-pressed] .term-cursor-arrow path { fill: var(--fg); }
+.term-cursor[data-pressed] .term-cursor-label { background: var(--bg); color: var(--green); box-shadow: none; translate: 3px 3px; }
+@media (prefers-reduced-motion: reduce) { .cursor, .term-cursor-beam { animation: none !important; } }
 /* Narrow cards: shrink the wordmark so the mounted screenshot sits beside it, not on top of it. */
 @container (max-width: 420px) {
 	.atlas-label { font-size: 46px; top: 22%; left: 9%; }
