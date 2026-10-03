@@ -1,7 +1,9 @@
-// Cloudflare Pages Function: POST /api/contact
-// Verifies Turnstile, then forwards the message to Javier via Resend.
+// Cloudflare Worker. Static files in dist/ are served by the assets binding;
+// only /api/* reaches this script (see run_worker_first in wrangler.jsonc).
+// POST /api/contact verifies Turnstile, then forwards the message via Resend.
 
 interface Env {
+	ASSETS: { fetch(request: Request): Promise<Response> };
 	RESEND_API_KEY: string;
 	TURNSTILE_SECRET_KEY: string;
 	CONTACT_TO: string;
@@ -17,7 +19,7 @@ const json = (body: Record<string, unknown>, status = 200) =>
 const escapeHtml = (value: string) =>
 	value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
 
-export const onRequestPost = async ({ request, env }: { request: Request; env: Env }) => {
+const handleContact = async (request: Request, env: Env) => {
 	let form: FormData;
 	try {
 		form = await request.formData();
@@ -63,4 +65,15 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
 	if (!sent.ok) return json({ ok: false, error: 'send_failed' }, 502);
 
 	return json({ ok: true });
+};
+
+export default {
+	async fetch(request: Request, env: Env) {
+		const { pathname } = new URL(request.url);
+		if (pathname === '/api/contact') {
+			if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
+			return handleContact(request, env);
+		}
+		return env.ASSETS.fetch(request);
+	},
 };

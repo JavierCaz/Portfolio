@@ -1,5 +1,5 @@
-# Copy to .dev.vars for `npm run preview:cf`. In production set these in
-# Cloudflare Pages → Settings → Variables and Secrets.
+# Copy to .dev.vars for `npm run preview:cf`. In production set them as Worker
+# secrets: `npx wrangler secret put <NAME>`.
 RESEND_API_KEY=re_xxxxxxxx
 # Cloudflare's always-pass test secret; replace with your real one in production.
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
