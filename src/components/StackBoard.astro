@@ -1,0 +1,120 @@
+---
+import { stackGroups, technologies, technologyTag } from '../data/stack';
+import type { StackGroupId } from '../data/stack';
+
+type Localized = { en: string; es: string };
+type Token = { kind: 'key'; text: Localized } | { kind: 'str' | 'punct'; text: string };
+type Line = { depth: number; tokens: Token[]; tech?: string; group?: StackGroupId };
+
+const icons = import.meta.glob<string>('../assets/stack-icons/*.svg', { eager: true, query: '?raw', import: 'default' });
+const iconFor = (id: string) => icons[`../assets/stack-icons/${id}.svg`] ?? '';
+
+const pad = (value: number) => String(value).padStart(2, '0');
+const key = (text: Localized): Token => ({ kind: 'key', text });
+const punct = (text: string): Token => ({ kind: 'punct', text });
+
+// Build the stack.json readout line by line so every entry can be linked to its tile.
+const lines: Line[] = [{ depth: 0, tokens: [punct('{')] }];
+const arrayLines = (group: StackGroupId, depth: number, label: Localized, items: typeof technologies, trailingComma: boolean) => {
+	lines.push({ depth, group, tokens: [key(label), punct(': [')] });
+	items.forEach((tech, index) => lines.push({ depth: depth + 1, group, tech: tech.id, tokens: [{ kind: 'str', text: `"${tech.name}"` }, punct(index < items.length - 1 ? ',' : '')] }));
+	lines.push({ depth, group, tokens: [punct(trailingComma ? '],' : ']')] });
+};
+stackGroups.forEach((group, groupIndex) => {
+	const isLast = groupIndex === stackGroups.length - 1;
+	const items = technologies.filter((tech) => tech.group === group.id);
+	if (group.id !== 'web') return arrayLines(group.id, 1, group.key, items, !isLast);
+	lines.push({ depth: 1, group: group.id, tokens: [key(group.key), punct(': {')] });
+	(['frontend', 'backend'] as const).forEach((sub, subIndex) => {
+		arrayLines(group.id, 2, { en: sub, es: sub }, items.filter((tech) => tech.sub === sub), subIndex === 0);
+	});
+	lines.push({ depth: 1, group: group.id, tokens: [punct(isLast ? '}' : '},')] });
+});
+lines.push({ depth: 0, tokens: [punct('}')] });
+
+const techPath = (tech: (typeof technologies)[number], language: 'en' | 'es') => {
+	const group = stackGroups.find((item) => item.id === tech.group)!;
+	return tech.sub ? `${group.key[language]}.${tech.sub}` : group.key[language];
+};
+---
+
+<div class="stack-board" data-stack-board>
+	<div class="stack-filter" role="group" aria-label="Filter technologies by group">
+		<span class="stack-command" aria-hidden="true"><b>$</b> ls ~/stack --group=</span>
+		<button type="button" data-stack-filter="all" aria-pressed="true">[ <span data-locale="en">ALL</span><span data-locale="es" hidden>TODO</span> <b>{technologies.length}</b> ]</button>
+		{stackGroups.map((group) => (
+			<button type="button" data-stack-filter={group.id} aria-pressed="false">[ <span data-locale="en">{group.label.en}</span><span data-locale="es" hidden>{group.label.es}</span> <b>{technologies.filter((tech) => tech.group === group.id).length}</b> ]</button>
+		))}
+	</div>
+	<div class="stack-body">
+		<div class="tech-wrap">
+			<ul class="tech-grid" aria-label="Technologies">
+				{technologies.map((tech, index) => (
+					<li class="tech-tile" tabindex="0" data-tech={tech.id} data-group={tech.group} data-name={tech.name} data-path-en={techPath(tech, 'en')} data-path-es={techPath(tech, 'es')}>
+						<span class="tech-meta"><span class="tech-number">{pad(index + 1)}</span><span class="tech-tag">{technologyTag(tech)}</span></span>
+						<span class="tech-mark"><span class="tech-symbol" aria-hidden="true">{tech.symbol}</span><span class="tech-icon" set:html={iconFor(tech.id)} /></span>
+						<span class="tech-name">{tech.name}</span>
+					</li>
+				))}
+				<li class="tech-tile tech-next">
+					<span class="tech-meta"><span class="tech-number">{pad(technologies.length + 1)}</span><span>NEXT</span></span>
+					<span class="tech-mark"><span class="tech-symbol" aria-hidden="true">??</span></span>
+					<span class="tech-name"><span data-i18n="alwaysLearning">ALWAYS LEARNING</span><span class="cursor">_</span></span>
+				</li>
+			</ul>
+		</div>
+		<div class="stack-panel">
+			<div class="panel-bar"><span>~/STACK.JSON</span><span data-i18n="readOnly">READ ONLY</span></div>
+			<div class="json-code" aria-hidden="true">
+				{lines.map((line, index) => (
+					<span class="json-line" data-line={index + 1} data-tech={line.tech} data-group={line.group}>{'  '.repeat(line.depth)}{line.tokens.map((token) => token.kind === 'key'
+						? <span class="json-key">"{token.text.en === token.text.es ? token.text.en : <><span data-locale="en">{token.text.en}</span><span data-locale="es" hidden>{token.text.es}</span></>}"</span>
+						: <span class={token.kind === 'str' ? 'json-str' : 'json-punct'}>{token.text}</span>)}</span>
+				))}
+			</div>
+			<div class="panel-foot">
+				<span class="status-dot"></span>
+				<span data-stack-idle><span data-locale="en">{technologies.length} ENTRIES · {stackGroups.length} GROUPS</span><span data-locale="es" hidden>{technologies.length} ENTRADAS · {stackGroups.length} GRUPOS</span></span>
+				<span data-stack-status hidden></span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	const board = document.querySelector<HTMLElement>('[data-stack-board]');
+	if (board) {
+		const linked = board.querySelectorAll<HTMLElement>('[data-tech]');
+		const grouped = board.querySelectorAll<HTMLElement>('[data-group]');
+		const filters = board.querySelectorAll<HTMLButtonElement>('[data-stack-filter]');
+		const idle = board.querySelector<HTMLElement>('[data-stack-idle]')!;
+		const status = board.querySelector<HTMLElement>('[data-stack-status]')!;
+
+		// Highlight a technology in both the tile grid and the JSON readout.
+		const setActive = (id?: string) => {
+			linked.forEach((node) => node.classList.toggle('is-active', !!id && node.dataset.tech === id));
+			const tile = id ? board.querySelector<HTMLElement>(`.tech-tile[data-tech="${id}"]`) : null;
+			const line = id ? board.querySelector<HTMLElement>(`.json-line[data-tech="${id}"]`) : null;
+			if (tile && line) {
+				const path = /^es/i.test(document.documentElement.lang) ? tile.dataset.pathEs : tile.dataset.pathEn;
+				status.textContent = `> inspect ${tile.dataset.name} · ${path} · ln ${line.dataset.line}`;
+			}
+			idle.hidden = !!(tile && line);
+			status.hidden = !(tile && line);
+		};
+
+		linked.forEach((node) => {
+			node.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') setActive(node.dataset.tech); });
+			node.addEventListener('pointerleave', (event) => { if (event.pointerType === 'mouse') setActive(); });
+			node.addEventListener('click', () => setActive(node.dataset.tech));
+			node.addEventListener('focus', () => setActive(node.dataset.tech));
+			node.addEventListener('blur', () => setActive());
+		});
+
+		filters.forEach((button) => button.addEventListener('click', () => {
+			const filter = button.dataset.stackFilter;
+			filters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+			grouped.forEach((node) => node.classList.toggle('is-dim', filter !== 'all' && node.dataset.group !== filter));
+		}));
+	}
+</script>

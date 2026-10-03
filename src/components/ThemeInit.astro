@@ -1,0 +1,14 @@
+---
+// Sets data-theme before first paint so the page never flashes the wrong theme.
+---
+
+<meta name="theme-color" content="#080a08" />
+<script is:inline>
+	(() => {
+		let theme;
+		try { theme = localStorage.getItem('portfolio-theme'); } catch {}
+		if (theme !== 'light' && theme !== 'dark') theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+		document.documentElement.dataset.theme = theme;
+		document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f2f1ea' : '#080a08');
+	})();
+</script>

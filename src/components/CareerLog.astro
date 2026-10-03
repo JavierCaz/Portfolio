@@ -1,0 +1,140 @@
+---
+import { careerLog } from '../data/career';
+
+// Graph geometry: one fixed-height row per commit, two lanes.
+const ROW = 60;
+const LANE_X = [16, 38];
+const y = (index: number) => index * ROW + ROW / 2;
+const height = careerLog.length * ROW;
+
+const branchRows = careerLog.map((entry, index) => (entry.lane === 1 ? index : -1)).filter((index) => index >= 0);
+const branchTop = Math.min(...branchRows);
+const branchBottom = Math.max(...branchRows);
+const mergeRow = careerLog.findIndex((entry) => entry.merge);
+const forkRow = branchBottom + 1;
+const [x0, x1] = LANE_X;
+const KINK = 18;
+
+const subject = (entry: (typeof careerLog)[number], language: 'en' | 'es') =>
+	entry.company ? `${entry.title[language]} @ ${entry.company}` : entry.title[language];
+---
+
+<div class="career-board" data-career-board>
+	<div class="career-bar">
+		<span class="career-command" aria-hidden="true"><b>$</b> git log --graph --all</span>
+		<button type="button" class="career-replay" data-career-replay aria-pressed="false">
+			<span data-replay-idle>[ ▶ REPLAY ]</span><span data-replay-running hidden>[ ■ STOP ]</span>
+		</button>
+	</div>
+	<div class="career-body">
+		<div class="career-log">
+			<svg class="career-graph" width={x1 + 16} height={height} viewBox={`0 0 ${x1 + 16} ${height}`} aria-hidden="true">
+				<line class="lane-main" x1={x0} y1={y(0)} x2={x0} y2={y(careerLog.length - 1)} />
+				<line class="lane-learning" x1={x1} y1={y(branchTop)} x2={x1} y2={y(branchBottom)} />
+				{mergeRow >= 0 && <polyline class="lane-learning" points={`${x1},${y(branchTop)} ${x1},${y(mergeRow) + KINK} ${x0},${y(mergeRow)}`} />}
+				{forkRow < careerLog.length && <polyline class="lane-learning" points={`${x0},${y(forkRow)} ${x1},${y(forkRow) - KINK} ${x1},${y(branchBottom)}`} />}
+				{careerLog.map((entry, index) => (
+					<rect class:list={['career-node', entry.lane === 1 ? 'is-learning' : 'is-main']} data-node={index} x={LANE_X[entry.lane] - 5} y={y(index) - 5} width="10" height="10" />
+				))}
+			</svg>
+			<ol class="career-commits" role="tablist" aria-orientation="vertical" aria-label="Career history">
+				{careerLog.map((entry, index) => (
+					<li role="presentation">
+						<button type="button" class="career-commit" role="tab" id={`commit-${entry.hash}`} aria-controls={`show-${entry.hash}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? '0' : '-1'} data-commit={index} data-lane={entry.lane}>
+							<span class="commit-meta">
+								<span class="commit-hash">{entry.hash}</span>
+								{entry.refs?.map((ref) => <span class="commit-ref">({ref})</span>)}
+								{entry.merge && <span class="commit-ref is-merge">MERGE</span>}
+								<span class="commit-date"><span data-locale="en">{entry.period.en}</span><span data-locale="es" hidden>{entry.period.es}</span></span>
+							</span>
+							<span class="commit-subject"><span data-locale="en">{subject(entry, 'en')}</span><span data-locale="es" hidden>{subject(entry, 'es')}</span></span>
+						</button>
+					</li>
+				))}
+			</ol>
+		</div>
+		<div class="career-show">
+			{careerLog.map((entry, index) => (
+				<article class="career-panel" role="tabpanel" id={`show-${entry.hash}`} aria-labelledby={`commit-${entry.hash}`} data-panel={index} hidden={index !== 0} data-lane={entry.lane}>
+					<div class="panel-bar"><span>$ git show {entry.hash}</span><span>{index + 1}/{careerLog.length}</span></div>
+					<div class="career-panel-body">
+						<pre class="show-header">commit {entry.hash}{entry.refs ? ` (${entry.refs.join(', ')})` : ''}{entry.merge ? `\nMerge: ${entry.merge} → main` : ''}
+Author: Javier Cazares</pre>
+						<p class="show-period"><span data-locale="en">{entry.period.en}</span><span data-locale="es" hidden>{entry.period.es}</span></p>
+						<h3 class="show-title"><span data-locale="en">{entry.title.en}</span><span data-locale="es" hidden>{entry.title.es}</span>{entry.company && <span class="show-company"> @ {entry.company}</span>}</h3>
+						<p class="show-body"><span data-locale="en">{entry.body.en}</span><span data-locale="es" hidden>{entry.body.es}</span></p>
+						{entry.tags && <p class="show-tags">{entry.tags.map((tag) => <span>[ {tag} ]</span>)}</p>}
+					</div>
+					<div class="career-nav">
+						<button type="button" data-step="1" disabled={index === careerLog.length - 1}><span data-locale="en">← OLDER</span><span data-locale="es" hidden>← ANTERIOR</span></button>
+						<button type="button" data-step="-1" disabled={index === 0}><span data-locale="en">NEWER →</span><span data-locale="es" hidden>RECIENTE →</span></button>
+					</div>
+				</article>
+			))}
+		</div>
+	</div>
+</div>
+
+<script>
+	const board = document.querySelector<HTMLElement>('[data-career-board]');
+	if (board) {
+		const commits = [...board.querySelectorAll<HTMLButtonElement>('[data-commit]')];
+		const panels = [...board.querySelectorAll<HTMLElement>('[data-panel]')];
+		const nodes = [...board.querySelectorAll<SVGRectElement>('[data-node]')];
+		const replay = board.querySelector<HTMLButtonElement>('[data-career-replay]')!;
+		let current = 0;
+		let timer: number | undefined;
+
+		const select = (index: number, focus = false) => {
+			current = Math.max(0, Math.min(commits.length - 1, index));
+			commits.forEach((commit, i) => {
+				const active = i === current;
+				commit.setAttribute('aria-selected', String(active));
+				commit.tabIndex = active ? 0 : -1;
+			});
+			panels.forEach((panel, i) => { panel.hidden = i !== current; });
+			nodes.forEach((node, i) => node.classList.toggle('is-active', i === current));
+			if (focus) commits[current].focus();
+		};
+
+		const stopReplay = () => {
+			if (timer === undefined) return;
+			window.clearInterval(timer);
+			timer = undefined;
+			replay.setAttribute('aria-pressed', 'false');
+			replay.querySelector<HTMLElement>('[data-replay-idle]')!.hidden = false;
+			replay.querySelector<HTMLElement>('[data-replay-running]')!.hidden = true;
+		};
+
+		// Walk the history from the first commit up to HEAD.
+		const startReplay = () => {
+			select(commits.length - 1);
+			replay.setAttribute('aria-pressed', 'true');
+			replay.querySelector<HTMLElement>('[data-replay-idle]')!.hidden = true;
+			replay.querySelector<HTMLElement>('[data-replay-running]')!.hidden = false;
+			timer = window.setInterval(() => {
+				if (current === 0) return stopReplay();
+				select(current - 1);
+			}, 1600);
+		};
+
+		replay.addEventListener('click', () => (timer === undefined ? startReplay() : stopReplay()));
+		commits.forEach((commit, index) => commit.addEventListener('click', () => { stopReplay(); select(index); }));
+		board.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((button) => button.addEventListener('click', () => {
+			stopReplay();
+			select(current + Number(button.dataset.step));
+		}));
+
+		// Arrow keys or j/k move through the log, like a pager.
+		board.querySelector('.career-commits')!.addEventListener('keydown', (event) => {
+			const key = (event as KeyboardEvent).key;
+			const step = { ArrowDown: 1, j: 1, ArrowUp: -1, k: -1, Home: -Infinity, End: Infinity }[key];
+			if (step === undefined) return;
+			event.preventDefault();
+			stopReplay();
+			select(Number.isFinite(step) ? current + step : step > 0 ? commits.length - 1 : 0, true);
+		});
+
+		select(0);
+	}
+</script>

@@ -1,0 +1,117 @@
+---
+import ThemeInit from '../../components/ThemeInit.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
+import '../../styles/global.css';
+import ArticleImage from '../../components/ArticleImage.astro';
+import { projects } from '../../data/projects';
+import type { ProjectLanguage, Project } from '../../data/projects';
+
+export function getStaticPaths() {
+	return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props as { project: Project };
+const languages: ProjectLanguage[] = ['en', 'es'];
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<ThemeInit />
+		<meta name="description" content={project.article.dek.en} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<title>{project.article.title.en} — Javier Cazares</title>
+	</head>
+	<body>
+		<header class="site-header">
+			<a class="wordmark" href="/#top" aria-label="Javier Cazares, home">jc<span class="wordmark-dot">.</span></a>
+			<div class="header-prompt"><span class="prompt-symbol">›</span> javier@dev-environment:~/projects/{project.slug}$</div>
+			<nav aria-label="Project navigation">
+				<a href="/#work"><span data-locale="en">[ ALL WORK ]</span><span data-locale="es" hidden>[ PROYECTOS ]</span></a>
+				<ThemeToggle />
+				<div class="language-switch" role="group" aria-label="Choose language">
+					<button type="button" data-language="en" aria-pressed="true">EN</button><span aria-hidden="true">/</span><button type="button" data-language="es" aria-pressed="false">ES</button>
+				</div>
+			</nav>
+		</header>
+
+		<main class="project-page shell">
+			<a class="project-back" href="/#work"><span data-locale="en">← BACK TO WORK</span><span data-locale="es" hidden>← VOLVER A PROYECTOS</span></a>
+			<header class="article-header">
+				<div class="article-meta"><span>PROJECT_{project.number}</span><span>JAVIER CAZARES</span><span>2026</span></div>
+				{languages.map((language) => (
+					<div class="article-type" data-article-language={language} hidden={language !== 'en'}>{project.type[language]}</div>
+				))}
+				{languages.map((language) => (
+					<div data-article-language={language} hidden={language !== 'en'}>
+						<h1>{project.article.title[language]}</h1>
+						<p class="article-dek">{project.article.dek[language]}</p>
+					</div>
+				))}
+				<div class="article-links">
+					{project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noreferrer">[ <span data-locale="en">TRY THE DEMO</span><span data-locale="es" hidden>PROBAR LA DEMO</span> ↗ ]</a>}
+					{project.repositoryUrl && <a href={project.repositoryUrl} target="_blank" rel="noreferrer">[ <span data-locale="en">VIEW SOURCE</span><span data-locale="es" hidden>VER CÓDIGO</span> ↗ ]</a>}
+				</div>
+			</header>
+
+			<div class="article-layout">
+				<aside class="article-aside">
+					<div class="aside-label"><span data-locale="en">IN THIS ENTRY</span><span data-locale="es" hidden>EN ESTA ENTRADA</span></div>
+					{languages.map((language) => <ol data-article-language={language} hidden={language !== 'en'}>{project.article.sections[language].map((section, index) => <li><span>{String(index + 1).padStart(2, '0')}</span> {section.heading}</li>)}</ol>)}
+					<div class="article-stack-label"><span data-locale="en">BUILT WITH</span><span data-locale="es" hidden>CONSTRUIDO CON</span></div>
+					<div class="article-stack">{project.stack.map((item) => <span>[ {item} ]</span>)}</div>
+				</aside>
+				<article class="article-body">
+					{languages.map((language) => (
+						<div data-article-language={language} hidden={language !== 'en'}>
+							<div class="article-intro">{project.article.intro[language].map((paragraph) => <p>{paragraph}</p>)}</div>
+							<ArticleImage src={project.article.introImage.src} alt={project.article.introImage.alt[language]} caption={project.article.introImage.caption[language]} />
+							{project.article.sections[language].map((section, index) => (
+								<section class="article-section" id={`section-${index + 1}`}>
+									<div class="article-section-index">{String(index + 1).padStart(2, '0')} <span>/</span></div>
+									<h2>{section.heading}</h2>
+									{section.blocks.map((block) => block.type === 'paragraph'
+										? <p>{block.text}</p>
+										: block.type === 'list'
+											? <ul>{block.items.map((item) => <li>{item}</li>)}</ul>
+											: <ArticleImage src={block.src} alt={block.alt[language]} caption={block.caption[language]} />)}
+								</section>
+							))}
+						</div>
+					))}
+					<footer class="article-footer">
+						<div><span data-locale="en">WANT TO TALK ABOUT THIS PROJECT?</span><span data-locale="es" hidden>¿QUIERES HABLAR DE ESTE PROYECTO?</span></div>
+						<a href="/#contact"><span data-locale="en">GET IN TOUCH ↗</span><span data-locale="es" hidden>HABLEMOS ↗</span></a>
+					</footer>
+				</article>
+			</div>
+		</main>
+
+		<footer class="site-footer shell"><a class="footer-mark" href="/#top">jc<span>.</span></a><span><span data-locale="en">MADE WITH INTENTION &amp; A LOT OF COFFEE.</span><span data-locale="es" hidden>HECHO CON INTENCIÓN Y MUCHO CAFÉ.</span></span><a href="/#top" class="back-top"><span data-locale="en">BACK TO TOP ↑</span><span data-locale="es" hidden>VOLVER ARRIBA ↑</span></a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
+		<script>
+			const localeNodes = document.querySelectorAll('[data-locale]');
+			const articleGroups = document.querySelectorAll('[data-article-language]');
+			const updateLanguage = (language, persist = false) => {
+				document.documentElement.lang = language;
+				localeNodes.forEach((node) => { node.hidden = node.dataset.locale !== language; });
+				articleGroups.forEach((node) => { node.hidden = node.dataset.articleLanguage !== language; });
+				document.querySelectorAll('[data-language]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.language === language)));
+				const title = document.querySelector(`[data-article-language="${language}"] h1`)?.textContent;
+				if (title) document.title = `${title} — Javier Cazares`;
+				const description = document.querySelector(`[data-article-language="${language}"] .article-dek`)?.textContent;
+				const metaDescription = document.querySelector('meta[name="description"]');
+				if (description && metaDescription) metaDescription.content = description;
+				if (persist) localStorage.setItem('portfolio-language', language);
+			};
+			const savedLanguage = localStorage.getItem('portfolio-language');
+			const preferredLanguage = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+			const initialLanguage = savedLanguage === 'en' || savedLanguage === 'es' ? savedLanguage : (/^es(-|$)/i.test(preferredLanguage) ? 'es' : 'en');
+			updateLanguage(initialLanguage);
+			document.querySelectorAll('[data-language]').forEach((button) => button.addEventListener('click', () => updateLanguage(button.dataset.language, true)));
+		</script>
+	</body>
+</html>

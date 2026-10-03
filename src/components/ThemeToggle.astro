@@ -1,0 +1,31 @@
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+	<span data-theme-key>--theme</span>=<span class="theme-flag" data-theme-label>dark</span>
+</button>
+
+<script>
+	const root = document.documentElement;
+	const themeColor = { light: '#f2f1ea', dark: '#080a08' };
+	const copy = {
+		en: { key: '--theme', light: 'light', dark: 'dark', switchTo: (theme: string) => `Switch to ${theme} theme` },
+		es: { key: '--tema', light: 'claro', dark: 'oscuro', switchTo: (theme: string) => `Cambiar a tema ${theme}` }
+	};
+
+	const render = () => {
+		const theme = root.dataset.theme === 'light' ? 'light' : 'dark';
+		const next = theme === 'light' ? 'dark' : 'light';
+		const text = /^es/i.test(root.lang) ? copy.es : copy.en;
+		document.querySelectorAll('[data-theme-key]').forEach((key) => { key.textContent = text.key; });
+		document.querySelectorAll('[data-theme-label]').forEach((label) => { label.textContent = text[theme]; });
+		document.querySelectorAll('[data-theme-toggle]').forEach((button) => button.setAttribute('aria-label', text.switchTo(text[next])));
+		document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor[theme]);
+	};
+
+	document.querySelectorAll('[data-theme-toggle]').forEach((button) => button.addEventListener('click', () => {
+		root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+		try { localStorage.setItem('portfolio-theme', root.dataset.theme); } catch {}
+		render();
+	}));
+	// Both pages switch language by setting <html lang>, so follow that instead of coupling to each page's i18n code.
+	new MutationObserver(render).observe(root, { attributes: true, attributeFilter: ['lang'] });
+	render();
+</script>

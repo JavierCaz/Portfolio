@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Debatra intro image placeholder</title>
+  <desc id="desc">Replace this file with a hero screenshot or image for the Debatra article.</desc>
+  <rect width="1280" height="720" fill="#080a08"/>
+  <path d="M0 88h1280M0 632h1280" stroke="#343a30" stroke-width="2"/>
+  <rect x="40" y="32" width="12" height="12" fill="#b8ff35"/>
+  <text x="72" y="45" fill="#b8ff35" font-family="monospace" font-size="18" letter-spacing="3">DEBATRA / PROJECT IMAGE 01</text>
+  <text x="1240" y="45" text-anchor="end" fill="#858b7d" font-family="monospace" font-size="16" letter-spacing="2">INTRO</text>
+  <rect x="80" y="152" width="1120" height="416" fill="#0c0f0c" stroke="#536148" stroke-width="2"/>
+  <path d="M80 212h1120" stroke="#343a30" stroke-width="2"/>
+  <circle cx="112" cy="182" r="7" fill="#b8ff35"/><circle cx="140" cy="182" r="7" fill="#555e4e"/><circle cx="168" cy="182" r="7" fill="#555e4e"/>
+  <text x="214" y="189" fill="#858b7d" font-family="monospace" font-size="15">ARTICLE HERO IMAGE SLOT</text>
+  <text x="640" y="326" text-anchor="middle" fill="#efefe8" font-family="monospace" font-size="52" font-weight="700" letter-spacing="-2">REPLACE WITH</text>
+  <text x="640" y="398" text-anchor="middle" fill="#b8ff35" font-family="monospace" font-size="62" font-weight="700" letter-spacing="-3">INTRO IMAGE</text>
+  <text x="640" y="455" text-anchor="middle" fill="#a1a99a" font-family="monospace" font-size="18">Drop a product screenshot, hero image, or project visual here.</text>
+  <text x="80" y="674" fill="#858b7d" font-family="monospace" font-size="15" letter-spacing="1">EXAMPLE SLOT / 1280 × 720 / REPLACE THIS SVG WHEN READY</text>
+  <text x="1200" y="674" text-anchor="end" fill="#b8ff35" font-family="monospace" font-size="17">J/C—01</text>
+</svg>

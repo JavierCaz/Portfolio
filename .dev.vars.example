@@ -1,0 +1,8 @@
+# Copy to .dev.vars for `npm run preview:cf`. In production set these in
+# Cloudflare Pages → Settings → Variables and Secrets.
+RESEND_API_KEY=re_xxxxxxxx
+# Cloudflare's always-pass test secret; replace with your real one in production.
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+CONTACT_TO=javiercaz98@gmail.com
+# Optional; needs a domain verified in Resend. Defaults to onboarding@resend.dev.
+# CONTACT_FROM=Portfolio <hello@yourdomain.com>
