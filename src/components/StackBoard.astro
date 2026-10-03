@@ -1,8 +1,5 @@
 ---
-import { stackGroups, technologies, technologyTag } from '../data/stack';
-
-const icons = import.meta.glob<string>('../assets/stack-icons/*.svg', { eager: true, query: '?raw', import: 'default' });
-const iconFor = (id: string) => icons[`../assets/stack-icons/${id}.svg`] ?? '';
+import { stackGroups, stackIcon, technologies, technologyTag } from '../data/stack';
 
 const pad = (value: number) => String(value).padStart(2, '0');
 ---
@@ -20,7 +17,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
 			{technologies.map((tech, index) => (
 				<li class="tech-tile" tabindex="0" data-tech={tech.id} data-group={tech.group}>
 					<span class="tech-meta"><span class="tech-number">{pad(index + 1)}</span><span class="tech-tag">{technologyTag(tech)}</span></span>
-					<span class="tech-mark"><span class="tech-symbol" aria-hidden="true">{tech.symbol}</span><span class="tech-icon" set:html={iconFor(tech.id)} /></span>
+					<span class="tech-mark"><span class="tech-symbol" aria-hidden="true">{tech.symbol}</span><span class="tech-icon" set:html={stackIcon(tech.id)} /></span>
 					<span class="tech-name">{tech.name}</span>
 				</li>
 			))}

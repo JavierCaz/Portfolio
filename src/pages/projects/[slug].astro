@@ -8,6 +8,7 @@ import '../../styles/global.css';
 import ArticleImage from '../../components/ArticleImage.astro';
 import SocialLinks from '../../components/SocialLinks.astro';
 import { projects } from '../../data/projects';
+import { projectStackIcon, stackIcon } from '../../data/stack';
 import type { ProjectLanguage, Project } from '../../data/projects';
 
 export function getStaticPaths() {
@@ -57,17 +58,20 @@ const languages: ProjectLanguage[] = ['en', 'es'];
 					</div>
 				))}
 				<div class="article-links">
-					{project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noreferrer">[ <span data-locale="en">TRY THE DEMO</span><span data-locale="es" hidden>PROBAR LA DEMO</span> ↗ ]</a>}
-					{project.repositoryUrl && <a href={project.repositoryUrl} target="_blank" rel="noreferrer">[ <span data-locale="en">VIEW SOURCE</span><span data-locale="es" hidden>VER CÓDIGO</span> ↗ ]</a>}
+					{project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noreferrer"><svg class="article-link-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M2 3h20v18H2zM2 8h20" /><path fill="currentColor" d="M10 11v7l6-3.5z" /></svg>[ <span data-locale="en">TRY THE DEMO</span><span data-locale="es" hidden>PROBAR LA DEMO</span> ↗ ]</a>}
+					{project.repositoryUrl && <a href={project.repositoryUrl} target="_blank" rel="noreferrer"><span class="article-link-icon" set:html={stackIcon('github')} />[ <span data-locale="en">VIEW SOURCE</span><span data-locale="es" hidden>VER CÓDIGO</span> ↗ ]</a>}
 				</div>
 			</header>
 
 			<div class="article-layout">
 				<aside class="article-aside">
 					<div class="aside-label"><span data-locale="en">IN THIS ENTRY</span><span data-locale="es" hidden>EN ESTA ENTRADA</span></div>
-					{languages.map((language) => <ol data-article-language={language} hidden={language !== 'en'}>{project.article.sections[language].map((section, index) => <li><span>{String(index + 1).padStart(2, '0')}</span> {section.heading}</li>)}</ol>)}
+					{languages.map((language) => <ol data-article-language={language} hidden={language !== 'en'}>{project.article.sections[language].map((section, index) => <li><a href={`#${language}-section-${index + 1}`}><span>{String(index + 1).padStart(2, '0')}</span> {section.heading}</a></li>)}</ol>)}
 					<div class="article-stack-label"><span data-locale="en">BUILT WITH</span><span data-locale="es" hidden>CONSTRUIDO CON</span></div>
-					<div class="article-stack">{project.stack.map((item) => <span>[ {item} ]</span>)}</div>
+					<ul class="article-stack">{project.stack.map((item) => {
+						const icon = projectStackIcon(item);
+						return <li>{icon && <span class="article-stack-icon" set:html={icon} />}<span>[ {item} ]</span></li>;
+					})}</ul>
 				</aside>
 				<article class="article-body">
 					{languages.map((language) => (
@@ -75,7 +79,7 @@ const languages: ProjectLanguage[] = ['en', 'es'];
 							<div class="article-intro">{project.article.intro[language].map((paragraph) => <p>{paragraph}</p>)}</div>
 							<ArticleImage src={project.article.introImage.src} alt={project.article.introImage.alt[language]} caption={project.article.introImage.caption[language]} />
 							{project.article.sections[language].map((section, index) => (
-								<section class="article-section" id={`section-${index + 1}`}>
+								<section class="article-section" id={`${language}-section-${index + 1}`}>
 									<div class="article-section-index">{String(index + 1).padStart(2, '0')} <span>/</span></div>
 									<h2>{section.heading}</h2>
 									{section.blocks.map((block) => block.type === 'paragraph'

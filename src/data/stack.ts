@@ -52,3 +52,12 @@ export const technologyTag = (tech: Technology) => {
 	const group = { web: 'WEB', mobile: 'MOB', database: 'DB', cloud: 'CLOUD', ai: 'AI', misc: 'TOOLS' }[tech.group];
 	return tech.sub ? `${group}/${tech.sub === 'frontend' ? 'FE' : 'BE'}` : group;
 };
+
+const icons = import.meta.glob<string>('../assets/stack-icons/*.svg', { eager: true, query: '?raw', import: 'default' });
+
+/** Raw SVG markup for a stack icon id (file name in src/assets/stack-icons), or '' if none. */
+export const stackIcon = (id: string) => icons[`../assets/stack-icons/${id}.svg`] ?? '';
+
+/** Icon for a project stack label: drops the version, e.g. 'NEXT.JS 15' → nextjs, 'EXPO SDK 57' → expo. */
+export const projectStackIcon = (label: string) =>
+	stackIcon(label.toLowerCase().replace(/\s+(sdk\s+)?\d[\d.]*$/, '').replace(/\./g, '').replace(/\s+/g, '-'));
