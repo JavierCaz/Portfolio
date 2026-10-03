@@ -118,6 +118,36 @@ h1 { font-size: clamp(46px, 7.4vw, 86px); line-height: 1.04; letter-spacing: -.1
 .text-link { color: var(--green); border: 1px solid var(--green); padding: 10px 12px; font-size: 9px; white-space: nowrap; }
 .text-link span { margin-left: 8px; }
 .hero-aside { position: absolute; bottom: 85px; right: 0; width: 220px; border-left: 1px solid var(--line); padding: 8px 0 8px 22px; }
+.portrait-window { position: relative; margin: 0 0 20px; border: 1px solid var(--line-strong); background: var(--panel); box-shadow: 8px 8px 0 var(--shadow); }
+.window-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 6px 5px 8px; border-bottom: 1px solid var(--line-strong); background: var(--panel-2); color: var(--fg-2); font-size: 8px; letter-spacing: .06em; line-height: 1.3; }
+.window-title { display: inline-flex; align-items: center; gap: 6px; }
+.window-glyph { width: 6px; height: 6px; background: var(--green-fill); }
+.window-controls { display: inline-flex; gap: 3px; }
+.window-controls i { width: 13px; height: 13px; display: grid; place-items: center; border: 1px solid var(--line); color: var(--muted); font-style: normal; font-size: 8px; line-height: 1; }
+.portrait-stage { position: relative; overflow: hidden; line-height: 0; cursor: crosshair; touch-action: pan-y; --x: 50%; --y: 50%; --lens: 54px; }
+.portrait-stage > img, .portrait-glitch img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.portrait-glitch { position: absolute; inset: 0; visibility: hidden; pointer-events: none; -webkit-mask-image: radial-gradient(circle var(--lens) at var(--x) var(--y), #000 99%, transparent 100%); mask-image: radial-gradient(circle var(--lens) at var(--x) var(--y), #000 99%, transparent 100%); }
+.portrait-glitch img { filter: url(#portrait-glitch) saturate(1.4) contrast(1.15); }
+.portrait-glitch .portrait-slice { position: absolute; inset: 0; mix-blend-mode: difference; }
+.portrait-scan { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 2px, rgb(0 255 65 / .28) 2px 3px); mix-blend-mode: screen; }
+.portrait-stage[data-active] .portrait-glitch { visibility: visible; animation: portrait-shake .5s steps(1) infinite; }
+.portrait-stage[data-active] .portrait-slice { animation: portrait-slice .36s steps(1) infinite; }
+.window-status { display: flex; justify-content: space-between; gap: 8px; padding: 5px 8px; border-top: 1px solid var(--line-strong); background: var(--panel-2); color: var(--muted); font-size: 8px; letter-spacing: .06em; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.portrait-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+@keyframes portrait-shake {
+	0% { transform: translate(0, 0); }
+	25% { transform: translate(-2px, 1px); }
+	50% { transform: translate(1px, 0); }
+	75% { transform: translate(2px, -1px); }
+}
+@keyframes portrait-slice {
+	0% { transform: translateX(6px); clip-path: inset(18% 0 74% 0); }
+	20% { transform: translateX(-8px); clip-path: inset(44% 0 48% 0); }
+	40% { transform: translateX(5px); clip-path: inset(0 0 100% 0); }
+	60% { transform: translateX(-4px); clip-path: inset(30% 0 64% 0); }
+	80% { transform: translateX(9px); clip-path: inset(58% 0 36% 0); }
+}
+@media (prefers-reduced-motion: reduce) { .portrait-stage[data-active] .portrait-glitch, .portrait-stage[data-active] .portrait-slice { animation: none; } .portrait-slice { display: none; } }
 .aside-label { color: var(--muted); }
 .mode-line { color: var(--green); font-size: 10px; margin: 12px 0; }
 .mode-square { display: inline-block; width: 7px; height: 7px; background: var(--green-fill); margin-right: 7px; }
@@ -388,6 +418,7 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 	.hero-foot p { font-size: 11px; max-width: 340px; }
 	.hero-foot .text-link { display: inline-block; margin-top: 16px; }
 	.hero-aside { position: relative; bottom: auto; width: auto; margin: 36px 0 0; padding: 0 0 0 14px; }
+	.portrait-window { max-width: 240px; }
 	.aside-rule { margin: 12px 0; }.aside-mark { font-size: 18px; }
 	.hero-index { bottom: 17px; }
 	.work-section, .stack-section, .career-section { padding: 57px 0 60px; }

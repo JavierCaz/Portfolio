@@ -7,6 +7,7 @@ import StackBoard from '../components/StackBoard.astro';
 import CareerLog from '../components/CareerLog.astro';
 import Localized from '../components/Localized.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import HeroPortrait from '../components/HeroPortrait.astro';
 import '../styles/global.css';
 import { projects } from '../data/projects';
 
@@ -57,12 +58,15 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 						<a class="text-link" href="#work"><span data-i18n="heroLink">TAKE A LOOK AROUND</span> <span aria-hidden="true">↘</span></a>
 					</div>
 				</div>
-				<div class="hero-aside" aria-hidden="true">
-					<div class="aside-label" data-i18n="currentMode">CURRENT MODE</div>
-					<div class="mode-line"><span class="mode-square"></span> <span data-i18n="makingThings">MAKING THINGS</span></div>
-					<div class="aside-rule"></div>
-					<div class="aside-label">BUILD / BREAK / LEARN</div>
-					<div class="aside-mark">[ 01—∞ ]</div>
+				<div class="hero-aside">
+					<HeroPortrait />
+					<div aria-hidden="true">
+						<div class="aside-label" data-i18n="currentMode">CURRENT MODE</div>
+						<div class="mode-line"><span class="mode-square"></span> <span data-i18n="makingThings">MAKING THINGS</span></div>
+						<div class="aside-rule"></div>
+						<div class="aside-label">BUILD / BREAK / LEARN</div>
+						<div class="aside-mark">[ 01—∞ ]</div>
+					</div>
 				</div>
 				<div class="hero-index" aria-hidden="true">PORTFOLIO / 2026</div>
 			</section>

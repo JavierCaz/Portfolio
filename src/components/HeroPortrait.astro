@@ -1,0 +1,66 @@
+---
+const src = '/images/javier-portrait.webp';
+---
+
+<figure class="portrait-window" data-portrait>
+	<div class="window-bar" aria-hidden="true">
+		<span class="window-title"><span class="window-glyph"></span>me.webp</span>
+		<span class="window-controls"><i>_</i><i>□</i><i>×</i></span>
+	</div>
+	<div class="portrait-stage" data-portrait-stage>
+		<img src={src} alt="Portrait of Javier Cazares by a lake surrounded by pine-covered hills" width="640" height="800" fetchpriority="high" decoding="async" />
+		<div class="portrait-glitch" aria-hidden="true">
+			<img src={src} alt="" width="640" height="800" decoding="async" />
+			<img class="portrait-slice" src={src} alt="" width="640" height="800" decoding="async" />
+			<span class="portrait-scan"></span>
+		</div>
+	</div>
+	<figcaption class="window-status" aria-hidden="true">
+		<span>640×800 · RGB</span>
+		<span data-portrait-coords>x:--- y:---</span>
+	</figcaption>
+	<!-- Pixelate, then split red from green/blue and offset them: the "glitch" seen inside the cursor lens. -->
+	<svg class="portrait-defs" width="0" height="0" aria-hidden="true" focusable="false">
+		<filter id="portrait-glitch" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+			<feFlood x="3" y="3" width="2" height="2" />
+			<feComposite width="7" height="7" />
+			<feTile result="grid" />
+			<feComposite in="SourceGraphic" in2="grid" operator="in" />
+			<feMorphology operator="dilate" radius="3" result="pixels" />
+			<feColorMatrix in="pixels" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+			<feOffset dx="-5" result="red" />
+			<feColorMatrix in="pixels" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
+			<feOffset dx="4" result="cyan" />
+			<feBlend in="red" in2="cyan" mode="screen" />
+		</filter>
+	</svg>
+</figure>
+
+<script>
+	document.querySelectorAll<HTMLElement>('[data-portrait]').forEach((portrait) => {
+		const stage = portrait.querySelector<HTMLElement>('[data-portrait-stage]');
+		const coords = portrait.querySelector<HTMLElement>('[data-portrait-coords]');
+		if (!stage || !coords) return;
+		const pad = (n: number) => String(n).padStart(3, '0');
+
+		const track = (event: PointerEvent) => {
+			const box = stage.getBoundingClientRect();
+			const x = event.clientX - box.left;
+			const y = event.clientY - box.top;
+			stage.style.setProperty('--x', `${x}px`);
+			stage.style.setProperty('--y', `${y}px`);
+			stage.dataset.active = '';
+			// Report coordinates in source-image pixels, like an image viewer would.
+			coords.textContent = `x:${pad(Math.round((x / box.width) * 640))} y:${pad(Math.round((y / box.height) * 800))}`;
+		};
+		const reset = () => {
+			delete stage.dataset.active;
+			coords.textContent = 'x:--- y:---';
+		};
+
+		stage.addEventListener('pointermove', track);
+		stage.addEventListener('pointerdown', track);
+		stage.addEventListener('pointerleave', reset);
+		stage.addEventListener('pointercancel', reset);
+	});
+</script>
