@@ -12,5 +12,8 @@
 		{ "pattern": "javiercazares.dev", "custom_domain": true },
 		{ "pattern": "www.javiercazares.dev", "custom_domain": true }
 	],
+	"vars": {
+		"CONTACT_FROM": "contacto@javiercazares.dev"
+	},
 	"observability": { "enabled": true }
 }
