@@ -62,7 +62,7 @@ const subject = (entry: (typeof careerLog)[number], language: 'en' | 'es') =>
 Author: Javier Cazares</pre>
 						<p class="show-period"><span data-locale="en">{entry.period.en}</span><span data-locale="es" hidden>{entry.period.es}</span></p>
 						<h3 class="show-title"><span data-locale="en">{entry.title.en}</span><span data-locale="es" hidden>{entry.title.es}</span>{entry.company && <span class="show-company"> @ {entry.company}</span>}</h3>
-						<p class="show-body"><span data-locale="en">{entry.body.en}</span><span data-locale="es" hidden>{entry.body.es}</span></p>
+						<div class="show-body"><div data-locale="en">{entry.body.en.split('\n\n').map((paragraph) => <p>{paragraph}</p>)}</div><div data-locale="es" hidden>{entry.body.es.split('\n\n').map((paragraph) => <p>{paragraph}</p>)}</div></div>
 						{entry.tags && <p class="show-tags">{entry.tags.map((tag) => <span>[ {tag} ]</span>)}</p>}
 					</div>
 					<div class="career-nav">
