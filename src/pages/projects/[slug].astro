@@ -5,6 +5,7 @@ import Logo from '../../components/Logo.astro';
 import BrandHead from '../../components/BrandHead.astro';
 import '../../styles/global.css';
 import ArticleImage from '../../components/ArticleImage.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
 import { projects } from '../../data/projects';
 import type { ProjectLanguage, Project } from '../../data/projects';
 
@@ -93,7 +94,7 @@ const languages: ProjectLanguage[] = ['en', 'es'];
 			</div>
 		</main>
 
-		<footer class="site-footer shell"><a class="footer-mark" href="/#top" aria-label="Javier Cazares, home"><Logo size={26} /></a><span><span data-locale="en">MADE WITH INTENTION &amp; A LOT OF COFFEE.</span><span data-locale="es" hidden>HECHO CON INTENCIÓN Y MUCHO CAFÉ.</span></span><a href="/#top" class="back-top"><span data-locale="en">BACK TO TOP ↑</span><span data-locale="es" hidden>VOLVER ARRIBA ↑</span></a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
+		<footer class="site-footer shell"><a class="footer-mark" href="/#top" aria-label="Javier Cazares, home"><Logo size={26} /></a><span><span data-locale="en">MADE WITH INTENTION &amp; A LOT OF COFFEE.</span><span data-locale="es" hidden>HECHO CON INTENCIÓN Y MUCHO CAFÉ.</span></span><SocialLinks compact /><a href="/#top" class="back-top"><span data-locale="en">BACK TO TOP ↑</span><span data-locale="es" hidden>VOLVER ARRIBA ↑</span></a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
 		<script>
 			const localeNodes = document.querySelectorAll('[data-locale]');
 			const articleGroups = document.querySelectorAll('[data-article-language]');

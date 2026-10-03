@@ -6,6 +6,7 @@ import BrandHead from '../components/BrandHead.astro';
 import StackBoard from '../components/StackBoard.astro';
 import CareerLog from '../components/CareerLog.astro';
 import Localized from '../components/Localized.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import '../styles/global.css';
 import { projects } from '../data/projects';
 
@@ -110,7 +111,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 			<section class="contact-section shell" id="contact" aria-labelledby="contact-title">
 				<div class="contact-top"><span class="section-index" data-i18n="contactIndex">04 / YOUR TURN</span><span class="contact-status"><span class="status-dot"></span> <span data-i18n="contactStatus">OPEN TO GOOD IDEAS</span></span></div>
 				<div class="contact-content">
-					<div><p class="command-line"><span>&gt;</span> <span data-i18n="contactCommand">./say-hello</span></p><h2 id="contact-title"><span data-i18n="contactTitle">Got a good<br />one</span><span class="highlight">?</span><span class="cursor">_</span></h2><p class="contact-copy" data-i18n="contactCopy">A project, a question, a half-formed thought. I’m listening.</p></div>
+					<div><p class="command-line"><span>&gt;</span> <span data-i18n="contactCommand">./say-hello</span></p><h2 id="contact-title"><span data-i18n="contactTitle">Got a good<br />one</span><span class="highlight">?</span><span class="cursor">_</span></h2><p class="contact-copy" data-i18n="contactCopy">A project, a question, a half-formed thought. I’m listening.</p><SocialLinks /></div>
 					<form id="idea-form" class="idea-form">
 						<label for="idea" data-i18n="ideaLabel">&gt; SYSTEM READY. DROP YOUR IDEA BELOW:</label>
 						<textarea id="idea" name="idea" rows="4" maxlength="5000" data-i18n-placeholder="ideaPlaceholder" placeholder="I’ve been thinking about..." required></textarea>
@@ -124,7 +125,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 			</section>
 		</main>
 
-		<footer class="site-footer shell"><a class="footer-mark" href="#top" aria-label="Javier Cazares, back to top"><Logo size={26} /></a><span data-i18n="footerMade">MADE WITH INTENTION &amp; A LOT OF COFFEE.</span><a href="#top" class="back-top" data-i18n="backTop">BACK TO TOP ↑</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
+		<footer class="site-footer shell"><a class="footer-mark" href="#top" aria-label="Javier Cazares, back to top"><Logo size={26} /></a><span data-i18n="footerMade">MADE WITH INTENTION &amp; A LOT OF COFFEE.</span><SocialLinks compact /><a href="#top" class="back-top" data-i18n="backTop">BACK TO TOP ↑</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
 		<script>
 			const translations = {
 				en: {

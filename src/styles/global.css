@@ -310,6 +310,12 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .form-bottom button:hover { background: var(--bg); color: var(--green); }
 .site-footer { min-height: 63px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 18px; color: var(--muted); font-size: 8px; }
 .back-top { padding: 5px; }
+.social-links { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.social-links a { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); color: var(--fg-2); padding: 7px 9px; font-size: 9px; letter-spacing: .05em; line-height: 1; }
+.social-links a:hover { background: var(--green-fill); border-color: var(--green-fill); color: var(--on-green); }
+.social-links svg { display: block; flex: 0 0 auto; }
+.social-links.is-compact { margin: 0; gap: 6px; }
+.social-links.is-compact a { padding: 6px; }
 [hidden] { display: none !important; }
 .project-read-link { display: inline-flex; gap: 8px; align-items: center; margin-top: 15px; padding: 8px 10px; border: 1px solid var(--green); color: var(--green); font-size: 8px; letter-spacing: .06em; }
 .project-read-link:hover { background: var(--green-fill); color: var(--on-green); }
