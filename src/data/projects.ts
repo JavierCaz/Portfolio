@@ -26,6 +26,8 @@ export type Project = {
 	stack: string[];
 	/** Screenshot mounted on the home page project card. */
 	cardImage?: string;
+	/** Home page card art: wordmark lines, tag line, and the colour theme class from global.css. */
+	cardArt: { label: [string, string]; tag: Record<ProjectLanguage, string>; theme: string };
 	cardDescription: Record<ProjectLanguage, string>;
 	article: {
 		title: Record<ProjectLanguage, string>;
@@ -46,6 +48,7 @@ export const projects: Project[] = [
 		type: { en: 'PRODUCT / FULL-STACK APP', es: 'PRODUCTO / APLICACIÓN FULL-STACK' },
 		stack: ['NEXT.JS 15', 'REACT 19', 'TYPESCRIPT', 'PRISMA', 'POSTGRESQL'],
 		cardImage: '/images/projects/debatra/card.webp',
+		cardArt: { label: ['deba', 'tra'], tag: { en: 'STRUCTURED DEBATE', es: 'DEBATE ESTRUCTURADO' }, theme: 'art-atlas' },
 		cardDescription: {
 			en: 'An asynchronous debate platform designed to make room for slower, more constructive conversations.',
 			es: 'Una plataforma de debate asincrónico pensada para dar espacio a conversaciones más pausadas y constructivas.',
@@ -206,6 +209,165 @@ export const projects: Project[] = [
 								'Un sistema comunitario de reportes para señalar comportamientos inapropiados, argumentos abusivos o incumplimientos de las reglas.',
 								'Respaldos comunitarios para las definiciones propuestas, con el fin de facilitar el consenso y la aceptación automática de definiciones con apoyo suficiente.',
 							] },
+						],
+					},
+				],
+			},
+		},
+	},
+	{
+		slug: 'paytrack',
+		number: '02',
+		repositoryUrl: 'https://github.com/JavierCaz/PayTrack',
+		name: { en: 'PAYTRACK', es: 'PAYTRACK' },
+		type: { en: 'PRODUCT / MOBILE APP', es: 'PRODUCTO / APLICACIÓN MÓVIL' },
+		stack: ['EXPO SDK 57', 'REACT NATIVE', 'TYPESCRIPT', 'ZUSTAND', 'SQLITE'],
+		cardImage: '/images/projects/paytrack/card.webp',
+		cardArt: { label: ['pay', 'track'], tag: { en: 'LOCAL-FIRST LEDGER', es: 'REGISTRO LOCAL' }, theme: 'art-ledger' },
+		cardDescription: {
+			en: 'A local-first mobile app for tracking clients, installment plans, and payments, with no account and no server.',
+			es: 'Una aplicación móvil local-first para llevar clientes, planes de pago y cobros, sin cuentas ni servidores.',
+		},
+		article: {
+			title: {
+				en: 'Building PayTrack: a local-first app for managing collections and payments',
+				es: 'PayTrack: una aplicación local-first para gestionar cobros y pagos',
+			},
+			dek: {
+				en: 'A tool I built for my own small business: no subscription, no ads, and no server between me and my records.',
+				es: 'Una herramienta que construí para mi propio negocio: sin suscripción, sin anuncios y sin un servidor entre mis registros y yo.',
+			},
+			intro: {
+				en: [
+					'I run a small personal business, and for years I managed it with an app from the Play Store. I paid a monthly subscription for the premium version, but when ads started appearing even for paying users, I decided to stop relying on it and build my own tool. That is how PayTrack was born.',
+					'Much of the software we use today starts from the same premise: our data lives on a server, and our apps are an interface for reaching it. For many products that makes complete sense. But for one person keeping track of who owes what, that architecture adds accounts, connectivity, and recurring costs that the problem never needed. PayTrack takes the opposite approach: everything lives on the device.',
+				],
+				es: [
+					'Tengo un pequeño negocio personal que durante años administré con una aplicación de la Play Store. Pagaba una suscripción mensual por la versión premium, pero cuando empezaron a aparecer anuncios incluso para quienes pagábamos, decidí dejar de depender de ella y construir mi propia herramienta. Así nació PayTrack.',
+					'Buena parte del software que usamos hoy parte de una misma premisa: nuestros datos viven en un servidor y las aplicaciones son una interfaz para acceder a ellos. Para muchos productos eso tiene todo el sentido. Pero para una persona que lleva el control de quién le debe qué, esa arquitectura añade cuentas, conexión y costos recurrentes que el problema nunca necesitó. PayTrack toma el camino contrario: todo vive en el dispositivo.',
+				],
+			},
+			introImage: {
+				src: '/images/projects/paytrack/intro.webp',
+				alt: {
+					en: 'PayTrack promotional image: the dashboard on a tablet and a phone, next to a feature list ending in “100% Local — your data stays on your device”.',
+					es: 'Imagen promocional de PayTrack: el panel en una tableta y un teléfono, junto a una lista de funciones que termina con “100% Local — your data stays on your device”.',
+				},
+				caption: {
+					en: 'PayTrack: clients, payments, receipts, and a financial overview, all stored locally.',
+					es: 'PayTrack: clientes, cobros, recibos y un resumen financiero, todo guardado localmente.',
+				},
+			},
+			sections: {
+				en: [
+					{
+						heading: 'Your data stays on your device',
+						blocks: [
+							{ type: 'paragraph', text: 'PayTrack has no backend, no sign-up, and no environment variables. Every client, collection, and payment is stored in a SQLite database on the phone, so the app works the same with or without an internet connection.' },
+							{ type: 'paragraph', text: 'Local-first does not have to mean fragile. All data can be exported as a JSON backup and restored on another device. The importer also understands the backup format of the app I used before, so years of existing records came along when I switched.' },
+						],
+					},
+					{
+						heading: 'Clients, collections, and installments',
+						blocks: [
+							{ type: 'paragraph', text: 'The model mirrors how the business actually works. A client can have several collections; each collection is a product or service sold on credit, with a total price and a number of installments. Each installment is recorded as paid, partial, or pending, and collections that fall behind are flagged as overdue automatically.' },
+							{ type: 'paragraph', text: 'The client list can be searched and filtered by active, pending, and settled status. Clients who should not receive new credit can be moved to a blacklist with a note explaining why.' },
+							{ type: 'image', src: '/images/projects/paytrack/clients.webp', alt: { en: 'Three PayTrack screens: the filtered client list, Ana Martínez’s profile with paid and remaining totals, and a laptop collection showing 7 of 10 payments made.', es: 'Tres pantallas de PayTrack: la lista de clientes filtrada, el perfil de Ana Martínez con totales pagados y pendientes, y un cobro de una laptop con 7 de 10 pagos realizados.' }, caption: { en: 'From client list to client profile to a single collection and its installment history.', es: 'De la lista de clientes al perfil de un cliente y a un cobro con su historial de pagos.' } },
+						],
+					},
+					{
+						heading: 'Schedules that match real life',
+						blocks: [
+							{ type: 'paragraph', text: 'Not everyone pays on the same rhythm. Each collection has a recurrence rule: specific days of the month (for example, the 1st and the 15th), specific days of the week, or a weekday within the month, such as the first Monday. Each rule is its own strategy in code, which keeps the date logic contained and easy to extend.' },
+							{ type: 'paragraph', text: 'A collection can also carry its own interest rate and exchange rate. That lets the app compute the actual earnings from each payment, even when an item was priced in another currency.' },
+						],
+					},
+					{
+						heading: 'Receipts and reminders',
+						blocks: [
+							{ type: 'paragraph', text: 'Every payment can produce a visual receipt showing the client, the collection, the installment number, and the balance left after paying. The receipt is rendered as an image so it can be shared in any messaging app or saved to the gallery.' },
+							{ type: 'paragraph', text: 'For clients with pending payments, a message button opens the share sheet with a customizable reminder. The template uses a {name} placeholder that is replaced with the client’s first name.' },
+							{ type: 'image', src: '/images/projects/paytrack/schedule.webp', alt: { en: 'The New Collection form with monthly, weekly, and monthly-weekday recurrence options, next to a payment receipt with Share and Save to Gallery buttons.', es: 'El formulario de nuevo cobro con opciones de recurrencia mensual, semanal y por día de la semana, junto a un recibo de pago con los botones Share y Save to Gallery.' }, caption: { en: 'Setting up a collection’s schedule, and the receipt generated for one of its payments.', es: 'La configuración del calendario de un cobro y el recibo generado para uno de sus pagos.' } },
+						],
+					},
+					{
+						heading: 'The whole business at a glance',
+						blocks: [
+							{ type: 'paragraph', text: 'The dashboard summarizes totals for clients, collections, and payments, along with what has been paid, what remains, the gross amount, the investment, and the earnings. The income view switches between day, week, month, and year, with a chart of paid amounts and earnings across the year.' },
+							{ type: 'paragraph', text: 'A privacy toggle masks every amount on screen, which is handy when the phone is open in front of other people.' },
+							{ type: 'image', src: '/images/projects/paytrack/dashboard.webp', alt: { en: 'The PayTrack dashboard: totals and financial cards, and the monthly income view with a yearly chart of paid out and earnings.', es: 'El panel de PayTrack: tarjetas de totales y finanzas, y la vista de ingresos mensuales con una gráfica anual de lo cobrado y las ganancias.' }, caption: { en: 'Totals, financials, and income over time, all computed on the device.', es: 'Totales, finanzas e ingresos a lo largo del tiempo, todo calculado en el dispositivo.' } },
+						],
+					},
+					{
+						heading: 'Under the hood',
+						blocks: [
+							{ type: 'paragraph', text: 'PayTrack is built with Expo SDK 57, React Native, React 19 with the React Compiler, and strict TypeScript. Expo Router provides file-based navigation for clients, collections, payments, receipts, and settings.' },
+							{ type: 'paragraph', text: 'Screens talk to Zustand stores, the stores call services, and the services run plain SQL through expo-sqlite. There is no ORM. The schema is created and migrated at startup with idempotent statements, so existing installs upgrade safely when a new column is added.' },
+							{ type: 'paragraph', text: 'Running SQLite on Android brought its own lessons. The database runs in WAL mode, opening the connection is serialized, failed queries reopen the connection and retry, and a lightweight keep-alive ping stops Android from dropping an idle connection.' },
+							{ type: 'paragraph', text: 'Builds go through EAS. Every push to main triggers a GitHub Actions workflow that builds an installable preview APK, so a new version can be tested on a real phone without going through the Play Store.' },
+						],
+					},
+					{
+						heading: 'Two languages, two themes',
+						blocks: [
+							{ type: 'paragraph', text: 'The interface is available in English and Spanish. It detects the device language and can also be changed manually in Settings. Light and dark themes follow the system by default or can be chosen explicitly.' },
+							{ type: 'image', src: '/images/projects/paytrack/languages.webp', alt: { en: 'The Settings screen in Spanish with the dark theme, next to the dashboard in English with the light theme.', es: 'La pantalla de configuración en español con el tema oscuro, junto al panel en inglés con el tema claro.' }, caption: { en: 'Settings in Spanish with the dark theme, and the dashboard in English with the light theme.', es: 'La configuración en español con el tema oscuro y el panel en inglés con el tema claro.' } },
+						],
+					},
+				],
+				es: [
+					{
+						heading: 'Tus datos se quedan en tu dispositivo',
+						blocks: [
+							{ type: 'paragraph', text: 'PayTrack no tiene backend, registro ni variables de entorno. Cada cliente, cobro y pago se guarda en una base de datos SQLite dentro del teléfono, así que la aplicación funciona igual con o sin conexión a internet.' },
+							{ type: 'paragraph', text: 'Local-first no tiene por qué significar frágil. Todos los datos se pueden exportar como un respaldo JSON y restaurarse en otro dispositivo. El importador también entiende el formato de respaldo de la aplicación que usaba antes, así que años de registros vinieron conmigo cuando hice el cambio.' },
+						],
+					},
+					{
+						heading: 'Clientes, cobros y pagos',
+						blocks: [
+							{ type: 'paragraph', text: 'El modelo refleja cómo funciona realmente el negocio. Un cliente puede tener varios cobros; cada cobro es un producto o servicio vendido a crédito, con un precio total y un número de pagos. Cada pago se registra como pagado, parcial o pendiente, y los cobros atrasados se marcan como vencidos automáticamente.' },
+							{ type: 'paragraph', text: 'La lista de clientes permite buscar y filtrar por estado: activos, pendientes y liquidados. A los clientes que no deberían recibir nuevos créditos se les puede pasar a una lista negra con una nota que explique el motivo.' },
+							{ type: 'image', src: '/images/projects/paytrack/clients.webp', alt: { en: 'Three PayTrack screens: the filtered client list, Ana Martínez’s profile with paid and remaining totals, and a laptop collection showing 7 of 10 payments made.', es: 'Tres pantallas de PayTrack: la lista de clientes filtrada, el perfil de Ana Martínez con totales pagados y pendientes, y un cobro de una laptop con 7 de 10 pagos realizados.' }, caption: { en: 'From client list to client profile to a single collection and its installment history.', es: 'De la lista de clientes al perfil de un cliente y a un cobro con su historial de pagos.' } },
+						],
+					},
+					{
+						heading: 'Calendarios que se ajustan a la realidad',
+						blocks: [
+							{ type: 'paragraph', text: 'No todas las personas pagan con el mismo ritmo. Cada cobro tiene una regla de recurrencia: días específicos del mes (por ejemplo, el 1 y el 15), días de la semana o un día de la semana dentro del mes, como el primer lunes. Cada regla es una estrategia independiente en el código, lo que mantiene acotada la lógica de fechas y facilita ampliarla.' },
+							{ type: 'paragraph', text: 'Un cobro también puede tener su propia tasa de interés y tipo de cambio. Así la aplicación calcula la ganancia real de cada pago, incluso cuando el artículo tenía un precio en otra moneda.' },
+						],
+					},
+					{
+						heading: 'Recibos y recordatorios',
+						blocks: [
+							{ type: 'paragraph', text: 'Cada pago puede generar un recibo visual con el cliente, el cobro, el número de pago y el saldo pendiente después de pagar. El recibo se genera como imagen para compartirlo en cualquier aplicación de mensajería o guardarlo en la galería.' },
+							{ type: 'paragraph', text: 'Para los clientes con pagos pendientes, un botón de mensaje abre el menú para compartir con un recordatorio personalizable. La plantilla usa el marcador {name}, que se reemplaza por el nombre del cliente.' },
+							{ type: 'image', src: '/images/projects/paytrack/schedule.webp', alt: { en: 'The New Collection form with monthly, weekly, and monthly-weekday recurrence options, next to a payment receipt with Share and Save to Gallery buttons.', es: 'El formulario de nuevo cobro con opciones de recurrencia mensual, semanal y por día de la semana, junto a un recibo de pago con los botones Share y Save to Gallery.' }, caption: { en: 'Setting up a collection’s schedule, and the receipt generated for one of its payments.', es: 'La configuración del calendario de un cobro y el recibo generado para uno de sus pagos.' } },
+						],
+					},
+					{
+						heading: 'Todo el negocio de un vistazo',
+						blocks: [
+							{ type: 'paragraph', text: 'El panel resume los totales de clientes, cobros y pagos, junto con lo cobrado, lo pendiente, el monto bruto, la inversión y las ganancias. La vista de ingresos cambia entre día, semana, mes y año, con una gráfica de lo cobrado y las ganancias a lo largo del año.' },
+							{ type: 'paragraph', text: 'Un interruptor de privacidad oculta todas las cantidades en pantalla, algo útil cuando el teléfono está abierto frente a otras personas.' },
+							{ type: 'image', src: '/images/projects/paytrack/dashboard.webp', alt: { en: 'The PayTrack dashboard: totals and financial cards, and the monthly income view with a yearly chart of paid out and earnings.', es: 'El panel de PayTrack: tarjetas de totales y finanzas, y la vista de ingresos mensuales con una gráfica anual de lo cobrado y las ganancias.' }, caption: { en: 'Totals, financials, and income over time, all computed on the device.', es: 'Totales, finanzas e ingresos a lo largo del tiempo, todo calculado en el dispositivo.' } },
+						],
+					},
+					{
+						heading: 'Bajo el capó',
+						blocks: [
+							{ type: 'paragraph', text: 'PayTrack está construida con Expo SDK 57, React Native, React 19 con React Compiler y TypeScript estricto. Expo Router ofrece navegación basada en archivos para clientes, cobros, pagos, recibos y configuración.' },
+							{ type: 'paragraph', text: 'Las pantallas se comunican con stores de Zustand, los stores llaman a servicios y los servicios ejecutan SQL directo mediante expo-sqlite. No hay ORM. El esquema se crea y migra al iniciar con sentencias idempotentes, así que las instalaciones existentes se actualizan sin problema cuando se agrega una columna nueva.' },
+							{ type: 'paragraph', text: 'Usar SQLite en Android dejó sus propias lecciones. La base de datos funciona en modo WAL, la apertura de la conexión está serializada, las consultas fallidas reabren la conexión y lo vuelven a intentar, y un ping ligero evita que Android cierre una conexión inactiva.' },
+							{ type: 'paragraph', text: 'Las compilaciones pasan por EAS. Cada push a main dispara un flujo de GitHub Actions que genera un APK de prueba instalable, así una nueva versión se puede probar en un teléfono real sin pasar por la Play Store.' },
+						],
+					},
+					{
+						heading: 'Dos idiomas, dos temas',
+						blocks: [
+							{ type: 'paragraph', text: 'La interfaz está disponible en inglés y español. Detecta el idioma del dispositivo y también se puede cambiar manualmente en la configuración. Los temas claro y oscuro siguen al sistema por defecto o se pueden elegir de forma explícita.' },
+							{ type: 'image', src: '/images/projects/paytrack/languages.webp', alt: { en: 'The Settings screen in Spanish with the dark theme, next to the dashboard in English with the light theme.', es: 'La pantalla de configuración en español con el tema oscuro, junto al panel en inglés con el tema claro.' }, caption: { en: 'Settings in Spanish with the dark theme, and the dashboard in English with the light theme.', es: 'La configuración en español con el tema oscuro y el panel en inglés con el tema claro.' } },
 						],
 					},
 				],

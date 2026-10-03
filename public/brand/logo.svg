@@ -1,10 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="1 0 56 56" shape-rendering="crispEdges" role="img" aria-labelledby="t">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="crispEdges" role="img" aria-labelledby="t">
 	<title id="t">Javier Cazares</title>
 	<style>
 		.cursor { animation: blink 1s steps(1) infinite; }
 		@keyframes blink { 50% { opacity: 0; } }
 		@media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
 	</style>
+	<!-- hard offset shadow -->
+	<rect x="8" y="8" width="54" height="54" fill="#B8FF35"/>
 	<!-- terminal tile; the frame is left open where the cursor sits -->
 	<path d="M29 3H55V55H3V3H17" fill="#080A08" stroke="#EFEFE8" stroke-width="2"/>
 	<g fill="#EFEFE8">

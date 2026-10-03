@@ -79,8 +79,13 @@ button, a, textarea { border-radius: 0; }
 .shell { width: min(1180px, calc(100% - 80px)); margin-inline: auto; }
 
 .site-header { min-height: 60px; padding: 0 max(40px, calc((100vw - 1180px) / 2)); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 24px; background: var(--bg); }
-.wordmark, .footer-mark { color: var(--fg); font-weight: 700; font-size: 20px; letter-spacing: -2px; }
-.wordmark-dot, .footer-mark span { color: var(--green); }
+.wordmark, .footer-mark { display: inline-flex; line-height: 0; }
+.logo-shadow, .logo-cursor { fill: var(--green); }
+.logo-tile { fill: var(--bg); stroke: var(--fg); }
+.logo-glyphs { fill: var(--fg); }
+.wordmark:hover .logo-tile, .footer-mark:hover .logo-tile { fill: var(--green-fill); stroke: var(--green-fill); }
+.wordmark:hover .logo-glyphs, .footer-mark:hover .logo-glyphs, .wordmark:hover .logo-cursor, .footer-mark:hover .logo-cursor { fill: var(--on-green); }
+.wordmark:hover .logo-shadow, .footer-mark:hover .logo-shadow { fill: var(--fg); }
 .header-prompt { color: var(--fg-2); font-size: 11px; letter-spacing: .015em; }
 .prompt-symbol { color: var(--green); margin-right: 7px; }
 .site-header nav { display: flex; align-items: center; gap: 20px; }
@@ -143,6 +148,10 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .atlas-grid i:nth-child(5) { background: var(--lime); }
 .atlas-shot { position: absolute; z-index: 1; left: 50%; top: 19%; width: 64%; height: auto; display: block; background: #fff; border: 1px solid #142008; box-shadow: 7px 7px 0 #142008; transform: rotate(-4deg); }
 .atlas-tag { position: absolute; left: 11%; bottom: 13%; font-size: 8px; line-height: 1.8; letter-spacing: .1em; }
+.art-ledger, .art-ledger .atlas-art { background: #ffd84d; color: #241d00; }
+.art-ledger .atlas-label { font-size: clamp(40px, 12.5cqi, 74px); }
+.art-ledger .atlas-label span { color: #8f7000; }
+.art-ledger .atlas-shot { border-color: #241d00; box-shadow: 7px 7px 0 #241d00; }
 .art-signal { background: #0b1110; }
 .signal-art { position: absolute; inset: 0; background-color: #0b1110; }
 .signal-ring { position: absolute; border: 1px solid #446b37; border-radius: 50% !important; aspect-ratio: 1; left: 50%; top: 52%; transform: translate(-50%, -50%); }
@@ -298,7 +307,7 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .form-bottom button { border: 1px solid var(--green); background: var(--green-fill); color: var(--on-green); cursor: pointer; padding: 10px 12px; font-size: 8px; font-weight: 700; letter-spacing: .04em; box-shadow: 3px 3px 0 var(--green-shadow); }
 .form-bottom button:hover { background: var(--bg); color: var(--green); }
 .site-footer { min-height: 63px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 18px; color: var(--muted); font-size: 8px; }
-.footer-mark { font-size: 17px; }.back-top { padding: 5px; }
+.back-top { padding: 5px; }
 [hidden] { display: none !important; }
 .project-read-link { display: inline-flex; gap: 8px; align-items: center; margin-top: 15px; padding: 8px 10px; border: 1px solid var(--green); color: var(--green); font-size: 8px; letter-spacing: .06em; }
 .project-read-link:hover { background: var(--green-fill); color: var(--on-green); }
@@ -407,4 +416,5 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 	.atlas-label { font-size: 46px; top: 22%; left: 9%; }
 	.atlas-shot { left: 46%; top: 15%; width: 60%; box-shadow: 5px 5px 0 #142008; }
 	.atlas-tag { left: 9%; }
+	.art-ledger .atlas-shot { box-shadow: 5px 5px 0 #241d00; }
 }

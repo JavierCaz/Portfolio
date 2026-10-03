@@ -1,8 +1,11 @@
 ---
 import ThemeInit from '../components/ThemeInit.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import Logo from '../components/Logo.astro';
+import BrandHead from '../components/BrandHead.astro';
 import StackBoard from '../components/StackBoard.astro';
 import CareerLog from '../components/CareerLog.astro';
+import Localized from '../components/Localized.astro';
 import '../styles/global.css';
 import { projects } from '../data/projects';
 
@@ -17,7 +20,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<ThemeInit />
 		<meta name="description" content="Javier Cazares — a corner of the internet for things made with care." data-i18n="metaDescription" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<BrandHead title="Javier Cazares — Maker's Terminal" description="Javier Cazares — a corner of the internet for things made with care." />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -26,7 +29,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 	</head>
 	<body>
 		<header class="site-header">
-			<a class="wordmark" href="#top" aria-label="Javier Cazares, back to top">jc<span class="wordmark-dot">.</span></a>
+			<a class="wordmark" href="#top" aria-label="Javier Cazares, back to top"><Logo size={34} /></a>
 			<div class="header-prompt"><span class="prompt-symbol">›</span> javier@dev-environment:~$</div>
 		<nav aria-label="Main navigation">
 				<a href="#work" data-i18n="navWork">[ WORK ]</a>
@@ -71,15 +74,15 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 				<div class="project-grid">
 					{projects.map((project) => (
 						<article class="project-card">
-							<div class="project-art art-atlas" aria-label={`${project.name.en} visual`} role="img">
-								<div class="art-topline"><span>J/C—{project.number}</span><span data-i18n={`project${project.number}Type`}>{project.type}</span></div>
-								<div class="atlas-art"><div class="atlas-label">deba<br />tra<span>.</span></div>{project.cardImage ? <img class="atlas-shot" src={project.cardImage} alt="" width="1200" height="792" loading="lazy" decoding="async" /> : <div class="atlas-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>}<div class="atlas-tag"><span data-i18n="project01Type">{project.type.en}</span><br /><span data-i18n="artDebate">STRUCTURED DEBATE</span> ↗</div></div>
+							<div class={`project-art ${project.cardArt.theme}`} aria-label={`${project.name.en} visual`} role="img">
+								<div class="art-topline"><span>J/C—{project.number}</span><Localized text={project.type} /></div>
+								<div class="atlas-art"><div class="atlas-label">{project.cardArt.label[0]}<br />{project.cardArt.label[1]}<span>.</span></div>{project.cardImage ? <img class="atlas-shot" src={project.cardImage} alt="" width="1200" height="792" loading="lazy" decoding="async" /> : <div class="atlas-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>}<div class="atlas-tag"><Localized text={project.type} /><br /><Localized text={project.cardArt.tag} /> ↗</div></div>
 								<span class="art-corner" aria-hidden="true">↗</span>
 							</div>
 							<div class="project-info">
-								<div class="project-title-row"><span class="project-number" data-i18n={`project${project.number}Label`}>PROJECT_{project.number}</span><span class="project-type" data-i18n={`project${project.number}Type`}>{project.type.en}</span></div>
-								<h3 data-i18n={`project${project.number}Name`}>{project.name.en}</h3>
-								<p data-i18n={`project${project.number}Description`}>{project.cardDescription.en}</p>
+								<div class="project-title-row"><span class="project-number"><span data-locale="en">PROJECT_{project.number}</span><span data-locale="es" hidden>PROYECTO_{project.number}</span></span><span class="project-type"><Localized text={project.type} /></span></div>
+								<h3><Localized text={project.name} /></h3>
+								<p><Localized text={project.cardDescription} /></p>
 								<div class="project-stack">[ {project.stack.join(' · ')} ]</div>
 								<a class="project-read-link" href={`/projects/${project.slug}/`}><span data-i18n="readProject">READ PROJECT NOTE</span> <span aria-hidden="true">↗</span></a>
 							</div>
@@ -121,11 +124,11 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 			</section>
 		</main>
 
-		<footer class="site-footer shell"><a class="footer-mark" href="#top">jc<span>.</span></a><span data-i18n="footerMade">MADE WITH INTENTION &amp; A LOT OF COFFEE.</span><a href="#top" class="back-top" data-i18n="backTop">BACK TO TOP ↑</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
+		<footer class="site-footer shell"><a class="footer-mark" href="#top" aria-label="Javier Cazares, back to top"><Logo size={26} /></a><span data-i18n="footerMade">MADE WITH INTENTION &amp; A LOT OF COFFEE.</span><a href="#top" class="back-top" data-i18n="backTop">BACK TO TOP ↑</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
 		<script>
 			const translations = {
 				en: {
-					pageTitle: "Javier Cazares — Maker's Terminal", metaDescription: 'Javier Cazares — a corner of the internet for things made with care.', artDebate: 'STRUCTURED DEBATE',
+					pageTitle: "Javier Cazares — Maker's Terminal", metaDescription: 'Javier Cazares — a corner of the internet for things made with care.',
 					navWork: '[ WORK ]', navStack: '[ STACK ]', navCareer: '[ LOG ]', navContact: '[ CONTACT ]', heroKicker: 'INDEPENDENT DEVELOPER', heroCommand: 'cd ~/the-good-stuff', readProject: 'READ PROJECT NOTE',
 					heroLine1: 'A space for', heroLine2: 'things <span class="highlight">made</span>', heroLine3: 'with purpose',
 					heroIntro: 'Hi, I’m Javier. I build useful software, follow interesting ideas, and share the things I learn along the way.', heroLink: 'TAKE A LOOK AROUND',
@@ -137,11 +140,10 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 					contactCopy: 'A project, a question, a half-formed thought.<br />I’m listening.', ideaLabel: '&gt; SYSTEM READY. DROP YOUR IDEA BELOW:',
 					ideaPlaceholder: 'I’ve been thinking about...', formHelp: 'GOES STRAIGHT TO MY INBOX.', sendNote: '[ EXECUTE SEND', emailLabel: '&gt; REPLY TO (OPTIONAL):',
 					footerMade: 'MADE WITH INTENTION &amp; A LOT OF COFFEE.', backTop: 'BACK TO TOP ↑',
-					project01Type: 'PRODUCT / FULL-STACK APP', project01Label: 'PROJECT_01', project01Name: 'DEBATRA', project01Description: 'An asynchronous debate platform designed to make room for slower, more constructive conversations.',
 					sending: 'TRANSMITTING...', sent: 'RECEIVED. I’LL GET BACK TO YOU.', captcha: 'VERIFICATION PENDING. TRY AGAIN IN A SECOND.', failed: 'SEND FAILED. YOUR NOTE WAS COPIED — EMAIL IT TO ME.'
 				},
 				es: {
-					pageTitle: 'Javier Cazares — Terminal del creador', metaDescription: 'Javier Cazares — un rincón de internet para compartir cosas hechas con intención.', artDebate: 'DEBATE ESTRUCTURADO',
+					pageTitle: 'Javier Cazares — Terminal del creador', metaDescription: 'Javier Cazares — un rincón de internet para compartir cosas hechas con intención.',
 					navWork: '[ PROYECTOS ]', navStack: '[ STACK ]', navCareer: '[ LOG ]', navContact: '[ CONTACTO ]', heroKicker: 'DESARROLLADOR INDEPENDIENTE', heroCommand: 'cd ~/buenas-ideas', readProject: 'LEER SOBRE EL PROYECTO',
 					heroLine1: 'Un espacio para', heroLine2: 'cosas <span class="highlight">hechas</span>', heroLine3: 'con propósito',
 					heroIntro: 'Hola, soy Javier. Creo software útil, sigo ideas interesantes y comparto lo que voy aprendiendo.', heroLink: 'ECHA UN VISTAZO',
@@ -153,7 +155,6 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 					contactCopy: 'Un proyecto, una pregunta, una idea a medio formar.<br />Te leo.', ideaLabel: '&gt; SISTEMA LISTO. CUÉNTAME TU IDEA:',
 					ideaPlaceholder: 'He estado pensando en...', formHelp: 'LLEGA DIRECTO A MI BANDEJA.', sendNote: '[ EJECUTAR ENVÍO', emailLabel: '&gt; RESPONDER A (OPCIONAL):',
 					footerMade: 'HECHO CON INTENCIÓN Y MUCHO CAFÉ.', backTop: 'VOLVER ARRIBA ↑',
-					project01Type: 'PRODUCTO / APLICACIÓN FULL-STACK', project01Label: 'PROYECTO_01', project01Name: 'DEBATRA', project01Description: 'Una plataforma de debate asincrónico pensada para dar espacio a conversaciones más pausadas y constructivas.',
 					sending: 'TRANSMITIENDO...', sent: 'RECIBIDO. TE RESPONDO PRONTO.', captcha: 'VERIFICACIÓN PENDIENTE. INTENTA DE NUEVO EN UN SEGUNDO.', failed: 'FALLÓ EL ENVÍO. TU MENSAJE SE COPIÓ — ENVÍAMELO POR CORREO.'
 				}
 			};
