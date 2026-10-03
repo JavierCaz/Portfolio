@@ -9,6 +9,7 @@ import CareerLog from '../components/CareerLog.astro';
 import Localized from '../components/Localized.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import HeroPortrait from '../components/HeroPortrait.astro';
+import LocalClock from '../components/LocalClock.astro';
 import '../styles/global.css';
 import { projects } from '../data/projects';
 
@@ -65,8 +66,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 						<div class="aside-label" data-i18n="currentMode">CURRENT MODE</div>
 						<div class="mode-line"><span class="mode-square"></span> <span data-i18n="makingThings">MAKING THINGS</span></div>
 						<div class="aside-rule"></div>
-						<div class="aside-label">BUILD / BREAK / LEARN</div>
-						<div class="aside-mark">[ 01—∞ ]</div>
+						<LocalClock />
 					</div>
 				</div>
 				<div class="hero-index" aria-hidden="true">PORTFOLIO / 2026</div>
@@ -80,17 +80,24 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 				<div class="project-grid">
 					{projects.map((project) => (
 						<article class="project-card">
+							<div class="window-bar" aria-hidden="true">
+								<span class="window-title"><span class="window-glyph"></span>~/work/{project.slug}</span>
+								<span class="window-controls"><i>_</i><i>□</i><i>×</i></span>
+							</div>
 							<div class={`project-art ${project.cardArt.theme}`} aria-label={`${project.name.en} visual`} role="img">
 								<div class="art-topline"><span>J/C—{project.number}</span><Localized text={project.type} /></div>
 								<div class="atlas-art"><div class="atlas-label">{project.cardArt.label[0]}<br />{project.cardArt.label[1]}<span>.</span></div>{project.cardImage ? <img class="atlas-shot" src={project.cardImage} alt="" width="1200" height="792" loading="lazy" decoding="async" /> : <div class="atlas-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>}<div class="atlas-tag"><Localized text={project.type} /><br /><Localized text={project.cardArt.tag} /> ↗</div></div>
 								<span class="art-corner" aria-hidden="true">↗</span>
 							</div>
 							<div class="project-info">
-								<div class="project-title-row"><span class="project-number"><span data-locale="en">PROJECT_{project.number}</span><span data-locale="es" hidden>PROYECTO_{project.number}</span></span><span class="project-type"><Localized text={project.type} /></span></div>
+								<div class="project-title-row"><span class="project-type"><Localized text={project.type} /></span></div>
 								<h3><Localized text={project.name} /></h3>
 								<p><Localized text={project.cardDescription} /></p>
 								<div class="project-stack">[ {project.stack.join(' · ')} ]</div>
 								<a class="project-read-link" href={`/projects/${project.slug}/`}><span data-i18n="readProject">READ PROJECT NOTE</span> <span aria-hidden="true">↗</span></a>
+							</div>
+							<div class="window-status" aria-hidden="true">
+								<span>{project.stack.length} MODULES · {project.cardImage ? '1200×792' : '—'}</span>
 							</div>
 						</article>
 					))}
@@ -140,7 +147,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 					heroIntro: 'Hi, I’m Javier. I build useful software, follow interesting ideas, and share the things I learn along the way.', heroLink: 'TAKE A LOOK AROUND',
 					currentMode: 'CURRENT MODE', makingThings: 'MAKING THINGS', workIndex: '01 / SELECTED WORK', workTitle: 'Things I’ve made',
 					workIntro: 'A few projects, experiments, and ideas that made it out of the notebook.', workNote: 'A living collection. More in progress, always.',
-					stackIndex: '02 / THE STACK', stackTitle: 'What I build with', stackIntro: 'Curiosity is part of the toolkit.', readOnly: 'READ ONLY', alwaysLearning: 'ALWAYS LEARNING',
+					stackIndex: '02 / THE STACK', stackTitle: 'What I build with', stackIntro: 'Curiosity is part of the toolkit.', alwaysLearning: 'ALWAYS LEARNING',
 					careerIndex: '03 / THE LOG', careerTitle: 'How I got here', careerIntro: 'A career, read like a git log. Pick a commit.',
 					contactIndex: '04 / YOUR TURN', contactStatus: 'OPEN TO GOOD IDEAS', contactCommand: './say-hello', contactTitle: 'Got a good<br />one',
 					contactCopy: 'A project, a question, a half-formed thought.<br />I’m listening.', ideaLabel: '&gt; SYSTEM READY. DROP YOUR IDEA BELOW:',
@@ -155,7 +162,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 					heroIntro: 'Hola, soy Javier. Creo software útil, sigo ideas interesantes y comparto lo que voy aprendiendo.', heroLink: 'ECHA UN VISTAZO',
 					currentMode: 'MODO ACTUAL', makingThings: 'CREANDO COSAS', workIndex: '01 / PROYECTOS', workTitle: 'Cosas que he creado',
 					workIntro: 'Proyectos, experimentos e ideas que salieron del cuaderno.', workNote: 'Una colección viva. Siempre hay algo más en camino.',
-					stackIndex: '02 / EL STACK', stackTitle: 'Con qué construyo', stackIntro: 'La curiosidad también es parte del oficio.', readOnly: 'SOLO LECTURA', alwaysLearning: 'SIEMPRE APRENDIENDO',
+					stackIndex: '02 / EL STACK', stackTitle: 'Con qué construyo', stackIntro: 'La curiosidad también es parte del oficio.', alwaysLearning: 'SIEMPRE APRENDIENDO',
 					careerIndex: '03 / EL LOG', careerTitle: 'Cómo llegué aquí', careerIntro: 'Una trayectoria, leída como un git log. Elige un commit.',
 					contactIndex: '04 / TU TURNO', contactStatus: 'ABIERTO A BUENAS IDEAS', contactCommand: './di-hola', contactTitle: '¿Tienes una<br />buena idea',
 					contactCopy: 'Un proyecto, una pregunta, una idea a medio formar.<br />Te leo.', ideaLabel: '&gt; SISTEMA LISTO. CUÉNTAME TU IDEA:',

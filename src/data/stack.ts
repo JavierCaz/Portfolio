@@ -6,8 +6,6 @@ export type StackGroup = {
 	id: StackGroupId;
 	/** Filter button label. */
 	label: Record<ProjectLanguage, string>;
-	/** Key used in the stack.json readout. */
-	key: Record<ProjectLanguage, string>;
 };
 
 export type Technology = {
@@ -16,17 +14,17 @@ export type Technology = {
 	/** Two-character "element" symbol shown on the tile. */
 	symbol: string;
 	group: StackGroupId;
-	/** Nested key inside the group (web only). */
+	/** Web sub-group, shown in the tile tag. */
 	sub?: 'frontend' | 'backend';
 };
 
 export const stackGroups: StackGroup[] = [
-	{ id: 'web', label: { en: 'WEB', es: 'WEB' }, key: { en: 'web', es: 'web' } },
-	{ id: 'mobile', label: { en: 'MOBILE', es: 'MÓVIL' }, key: { en: 'mobile', es: 'móvil' } },
-	{ id: 'database', label: { en: 'DATA', es: 'DATOS' }, key: { en: 'database', es: 'bases de datos' } },
-	{ id: 'cloud', label: { en: 'CLOUD', es: 'NUBE' }, key: { en: 'cloud services', es: 'servicios en la nube' } },
-	{ id: 'ai', label: { en: 'AI', es: 'IA' }, key: { en: 'ai development', es: 'desarrollo con IA' } },
-	{ id: 'misc', label: { en: 'TOOLS', es: 'HERRAMIENTAS' }, key: { en: 'misc', es: 'otros' } },
+	{ id: 'web', label: { en: 'WEB', es: 'WEB' } },
+	{ id: 'mobile', label: { en: 'MOBILE', es: 'MÓVIL' } },
+	{ id: 'database', label: { en: 'DATA', es: 'DATOS' } },
+	{ id: 'cloud', label: { en: 'CLOUD', es: 'NUBE' } },
+	{ id: 'ai', label: { en: 'AI', es: 'IA' } },
+	{ id: 'misc', label: { en: 'TOOLS', es: 'HERRAMIENTAS' } },
 ];
 
 export const technologies: Technology[] = [

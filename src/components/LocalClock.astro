@@ -1,0 +1,28 @@
+<div class="aside-label"><span data-locale="en">LOCAL TIME / CD. JUÁREZ</span><span data-locale="es" hidden>HORA LOCAL / CD. JUÁREZ</span></div>
+<div class="aside-mark local-clock"><span data-clock-time>--:--:--</span> <span class="clock-zone" data-clock-zone></span></div>
+
+<script>
+	const time = document.querySelector<HTMLElement>('[data-clock-time]');
+	const zone = document.querySelector<HTMLElement>('[data-clock-zone]');
+	if (time && zone) {
+		// Ciudad Juárez has its own tz id since tzdata 2022g; Denver shares its rules for older browsers.
+		const timeZone = (() => {
+			try {
+				new Intl.DateTimeFormat('en-US', { timeZone: 'America/Ciudad_Juarez' });
+				return 'America/Ciudad_Juarez';
+			} catch {
+				return 'America/Denver';
+			}
+		})();
+		const clock = new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' });
+		const offset = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'shortOffset' });
+
+		const tick = () => {
+			const now = new Date();
+			time.textContent = clock.format(now);
+			zone.textContent = offset.formatToParts(now).find((part) => part.type === 'timeZoneName')?.value ?? '';
+			setTimeout(tick, 1000 - (now.getTime() % 1000));
+		};
+		tick();
+	}
+</script>
