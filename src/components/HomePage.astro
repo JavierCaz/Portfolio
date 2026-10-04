@@ -1,0 +1,206 @@
+---
+import ThemeInit from './ThemeInit.astro';
+import TerminalCursor from './TerminalCursor.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import Logo from './Logo.astro';
+import SeoHead from './SeoHead.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
+import LanguageRedirect from './LanguageRedirect.astro';
+import StackBoard from './StackBoard.astro';
+import CareerLog from './CareerLog.astro';
+import SocialLinks from './SocialLinks.astro';
+import HeroPortrait from './HeroPortrait.astro';
+import LocalClock from './LocalClock.astro';
+import '../styles/global.css';
+import { projects } from '../data/projects';
+import { homeCopy } from '../data/home';
+import { homePath, homeStructuredData, projectPath, type Lang } from '../data/site';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = homeCopy[lang];
+const alternates = { en: homePath('en'), es: homePath('es') };
+const structuredData = homeStructuredData(Astro.site!, lang, { description: t.metaDescription, services: t.services });
+
+// Falls back to Cloudflare's always-pass test key for local dev.
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+---
+
+<html lang={lang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		{lang === 'en' && <LanguageRedirect to={alternates.es} />}
+		<ThemeInit />
+		<SeoHead title={t.pageTitle} description={t.metaDescription} lang={lang} alternates={alternates} imageAlt={t.ogImageAlt} structuredData={structuredData} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	</head>
+	<body>
+		<header class="site-header">
+			<a class="wordmark" href="#top" aria-label="Javier Cazares, back to top"><Logo size={34} /></a>
+			<div class="header-prompt"><span class="prompt-symbol">›</span> javier@dev-environment:~$</div>
+		<nav aria-label={t.navLabel}>
+				<a href="#services">{t.navServices}</a>
+				<a href="#work">{t.navWork}</a>
+				<a href="#stack">{t.navStack}</a>
+				<a href="#career">{t.navCareer}</a>
+				<a href="#contact">{t.navContact}</a>
+				<ThemeToggle />
+				<LanguageSwitch lang={lang} alternates={alternates} />
+			</nav>
+		</header>
+
+		<main id="top">
+			<section class="hero shell" aria-labelledby="hero-title">
+				<div class="hero-kicker"><span class="status-dot"></span> <span>{t.heroKicker}</span> <span class="kicker-separator">/</span> {t.heroLocation}</div>
+				<div class="hero-copy">
+					<p class="command-line"><span>&gt;</span> <span>{t.heroCommand}</span></p>
+					<h1 id="hero-title"><span>{t.heroLine1}</span><br /><span set:html={t.heroLine2} /><br /><span>{t.heroLine3}</span><span class="cursor">_</span></h1>
+					<div class="hero-foot">
+						<p>{t.heroIntro}</p>
+						<a class="text-link" href="#services"><span>{t.heroLink}</span> <span aria-hidden="true">↘</span></a>
+					</div>
+					<SocialLinks />
+				</div>
+				<div class="hero-aside">
+					<HeroPortrait />
+					<div aria-hidden="true">
+						<div class="aside-label">{t.currentMode}</div>
+						<div class="mode-line"><span class="mode-square"></span> <span>{t.makingThings}</span></div>
+						<div class="aside-rule"></div>
+						<LocalClock lang={lang} />
+					</div>
+				</div>
+				<div class="hero-index" aria-hidden="true">PORTFOLIO / 2026</div>
+			</section>
+
+			<section class="services-section shell" id="services" aria-labelledby="services-title">
+				<div class="section-heading compact-heading">
+					<div><span class="section-index">{t.servicesIndex}</span><h2 id="services-title">{t.servicesTitle}<span class="heading-period">.</span></h2></div>
+					<p>{t.servicesIntro}</p>
+				</div>
+				<div class="services-board">
+					<div class="panel-bar" aria-hidden="true"><span>$ ls ~/services</span><span>{t.services.length}</span></div>
+					<ul class="service-grid">
+						{t.services.map((service, index) => (
+							<li class="service-item">
+								<span class="service-command" aria-hidden="true"><b>{String(index + 1).padStart(2, '0')}</b> {service.command}</span>
+								<h3>{service.title}</h3>
+								<p>{service.body}</p>
+							</li>
+						))}
+					</ul>
+					<div class="services-foot">
+						<p><span class="prompt-symbol">›</span>{t.servicesArea}</p>
+						<a class="text-link" href="#contact">[ {t.servicesCta} <span aria-hidden="true">↗</span> ]</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="work-section shell" id="work" aria-labelledby="work-title">
+				<div class="section-heading">
+					<div><span class="section-index">{t.workIndex}</span><h2 id="work-title">{t.workTitle}<span class="heading-period">.</span></h2></div>
+					<p>{t.workIntro}</p>
+				</div>
+				<div class="project-grid">
+					{projects.map((project) => (
+						<article class="project-card">
+							<div class="window-bar" aria-hidden="true">
+								<span class="window-title"><span class="window-glyph"></span>~/work/{project.slug}</span>
+								<span class="window-controls"><i>_</i><i>□</i><i>×</i></span>
+							</div>
+							<div class={`project-art ${project.cardArt.theme}`} aria-label={`${project.name[lang]} visual`} role="img">
+								<div class="art-topline"><span>J/C—{project.number}</span><span>{project.type[lang]}</span></div>
+								<div class="atlas-art"><div class="atlas-label">{project.cardArt.label[0]}<br />{project.cardArt.label[1]}<span>.</span></div>{project.cardImage ? <img class="atlas-shot" src={project.cardImage} alt="" width="1200" height="792" loading="lazy" decoding="async" /> : <div class="atlas-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>}<div class="atlas-tag">{project.type[lang]}<br />{project.cardArt.tag[lang]} ↗</div></div>
+								<span class="art-corner" aria-hidden="true">↗</span>
+							</div>
+							<div class="project-info">
+								<div class="project-title-row"><span class="project-type">{project.type[lang]}</span></div>
+								<h3>{project.name[lang]}</h3>
+								<p>{project.cardDescription[lang]}</p>
+								<div class="project-stack">[ {project.stack.join(' · ')} ]</div>
+								<a class="project-read-link" href={projectPath(lang, project.slug)}><span>{t.readProject}</span> <span aria-hidden="true">↗</span></a>
+							</div>
+							<div class="window-status" aria-hidden="true">
+								<span>{project.stack.length} MODULES · {project.cardImage ? '1200×792' : '—'}</span>
+							</div>
+						</article>
+					))}
+				</div>
+				<p class="work-note"><span>*</span> <span>{t.workNote}</span></p>
+			</section>
+
+			<section class="stack-section shell" id="stack" aria-labelledby="stack-title">
+				<div class="section-heading compact-heading">
+					<div><span class="section-index">{t.stackIndex}</span><h2 id="stack-title">{t.stackTitle}<span class="heading-period">.</span></h2></div>
+					<p>{t.stackIntro}</p>
+				</div>
+				<StackBoard lang={lang} />
+			</section>
+
+			<section class="career-section shell" id="career" aria-labelledby="career-title">
+				<div class="section-heading compact-heading">
+					<div><span class="section-index">{t.careerIndex}</span><h2 id="career-title">{t.careerTitle}<span class="heading-period">.</span></h2></div>
+					<p>{t.careerIntro}</p>
+				</div>
+				<CareerLog lang={lang} />
+			</section>
+			<section class="contact-section shell" id="contact" aria-labelledby="contact-title">
+				<div class="contact-top"><span class="section-index">{t.contactIndex}</span><span class="contact-status"><span class="status-dot"></span> <span>{t.contactStatus}</span></span></div>
+				<div class="contact-content">
+					<div><p class="command-line"><span>&gt;</span> <span>{t.contactCommand}</span></p><h2 id="contact-title"><span set:html={t.contactTitle} /><span class="highlight">?</span><span class="cursor">_</span></h2><p class="contact-copy" set:html={t.contactCopy} /></div>
+					<form id="idea-form" class="idea-form" data-messages={JSON.stringify(t.formMessages)}>
+						<label for="idea" set:html={t.ideaLabel} />
+						<textarea id="idea" name="idea" rows="4" maxlength="5000" placeholder={t.ideaPlaceholder} required></textarea>
+						<label for="idea-email" class="email-label" set:html={t.emailLabel} />
+						<input id="idea-email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" />
+						<input class="honeypot" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+						<div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto" data-size="flexible" data-language={lang}></div>
+						<div class="form-bottom"><span id="form-feedback" aria-live="polite">{t.formHelp}</span><button type="submit"><span>{t.sendNote}</span> <span aria-hidden="true">↗</span> ]</button></div>
+					</form>
+				</div>
+			</section>
+		</main>
+
+		<footer class="site-footer shell"><a class="footer-mark" href="#top" aria-label="Javier Cazares, back to top"><Logo size={26} /></a><span set:html={t.footerMade} /><SocialLinks compact /><a href="#top" class="back-top">{t.backTop}</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
+		<script>
+			const form = document.querySelector<HTMLFormElement>('#idea-form');
+			const field = document.querySelector<HTMLTextAreaElement>('#idea');
+			const feedback = document.querySelector<HTMLElement>('#form-feedback');
+			const submitButton = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+			const messages: Record<string, string> = JSON.parse(form?.dataset.messages ?? '{}');
+			const say = (key: string) => { if (feedback) feedback.textContent = messages[key] ?? ''; };
+			form?.addEventListener('submit', async (event) => {
+				event.preventDefault();
+				if (!field?.value.trim() || !feedback || !submitButton) return;
+				submitButton.disabled = true;
+				say('sending');
+				try {
+					const response = await fetch('/api/contact', { method: 'POST', body: new FormData(form) });
+					const result = await response.json().catch(() => ({ ok: false }));
+					if (result.ok) {
+						form.reset();
+						say('sent');
+					} else if (result.error === 'captcha') {
+						say('captcha');
+					} else {
+						throw new Error(result.error);
+					}
+				} catch {
+					await navigator.clipboard.writeText(field.value.trim()).catch(() => field.select());
+					say('failed');
+				} finally {
+					window.turnstile?.reset();
+					submitButton.disabled = false;
+				}
+			});
+		</script>
+		<TerminalCursor />
+	</body>
+</html>

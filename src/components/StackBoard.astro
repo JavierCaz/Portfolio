@@ -1,5 +1,8 @@
 ---
 import { stackGroups, stackIcon, technologies, technologyTag } from '../data/stack';
+import type { Lang } from '../data/site';
+
+const { lang } = Astro.props as { lang: Lang };
 
 const pad = (value: number) => String(value).padStart(2, '0');
 ---
@@ -7,9 +10,9 @@ const pad = (value: number) => String(value).padStart(2, '0');
 <div class="stack-board" data-stack-board>
 	<div class="stack-filter" role="group" aria-label="Filter technologies by group">
 		<span class="stack-command" aria-hidden="true"><b>$</b> ls ~/stack --group=</span>
-		<button type="button" data-stack-filter="all" aria-pressed="true">[ <span data-locale="en">ALL</span><span data-locale="es" hidden>TODO</span> <b>{technologies.length}</b> ]</button>
+		<button type="button" data-stack-filter="all" aria-pressed="true">[ {lang === 'es' ? 'TODO' : 'ALL'} <b>{technologies.length}</b> ]</button>
 		{stackGroups.map((group) => (
-			<button type="button" data-stack-filter={group.id} aria-pressed="false">[ <span data-locale="en">{group.label.en}</span><span data-locale="es" hidden>{group.label.es}</span> <b>{technologies.filter((tech) => tech.group === group.id).length}</b> ]</button>
+			<button type="button" data-stack-filter={group.id} aria-pressed="false">[ {group.label[lang]} <b>{technologies.filter((tech) => tech.group === group.id).length}</b> ]</button>
 		))}
 	</div>
 	<div class="tech-wrap">
@@ -24,7 +27,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
 			<li class="tech-tile tech-next">
 				<span class="tech-meta"><span class="tech-number">{pad(technologies.length + 1)}</span><span>NEXT</span></span>
 				<span class="tech-mark"><span class="tech-symbol" aria-hidden="true">??</span></span>
-				<span class="tech-name"><span data-i18n="alwaysLearning">ALWAYS LEARNING</span><span class="cursor">_</span></span>
+				<span class="tech-name">{lang === 'es' ? 'SIEMPRE APRENDIENDO' : 'ALWAYS LEARNING'}<span class="cursor">_</span></span>
 			</li>
 		</ul>
 	</div>

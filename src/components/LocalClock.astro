@@ -1,4 +1,10 @@
-<div class="aside-label"><span data-locale="en">LOCAL TIME / CD. JUÁREZ</span><span data-locale="es" hidden>HORA LOCAL / CD. JUÁREZ</span></div>
+---
+import type { Lang } from '../data/site';
+
+const { lang } = Astro.props as { lang: Lang };
+---
+
+<div class="aside-label">{lang === 'es' ? 'HORA LOCAL' : 'LOCAL TIME'} / CD. JUÁREZ</div>
 <div class="aside-mark local-clock"><span data-clock-time>--:--:--</span> <span class="clock-zone" data-clock-zone></span></div>
 
 <script>

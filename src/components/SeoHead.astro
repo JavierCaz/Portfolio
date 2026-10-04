@@ -1,0 +1,46 @@
+---
+/**
+ * Title, description, canonical + hreflang alternates, social card, icons and structured data.
+ * Icon sources live in public/ (favicon.svg is the master; the PNGs and .ico are rendered from it).
+ */
+import { languages, ogLocale, type Lang } from '../data/site';
+
+interface Props {
+	title: string;
+	description: string;
+	lang: Lang;
+	/** Path of this page in each language. */
+	alternates: Record<Lang, string>;
+	imageAlt: string;
+	ogType?: 'website' | 'article';
+	structuredData?: object;
+}
+
+const { title, description, lang, alternates, imageAlt, ogType = 'website', structuredData } = Astro.props;
+const absolute = (path: string) => new URL(path, Astro.site).href;
+const canonical = absolute(alternates[lang]);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{languages.map((language) => <link rel="alternate" hreflang={language} href={absolute(alternates[language])} />)}
+<link rel="alternate" hreflang="x-default" href={absolute(alternates.en)} />
+<link rel="sitemap" href="/sitemap.xml" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content="Javier Cazares" />
+<meta property="og:locale" content={ogLocale[lang]} />
+{languages.filter((language) => language !== lang).map((language) => <meta property="og:locale:alternate" content={ogLocale[language]} />)}
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={absolute('/og.png')} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+{structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}

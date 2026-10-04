@@ -1,0 +1,112 @@
+---
+import ThemeInit from './ThemeInit.astro';
+import TerminalCursor from './TerminalCursor.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import Logo from './Logo.astro';
+import SeoHead from './SeoHead.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
+import LanguageRedirect from './LanguageRedirect.astro';
+import '../styles/global.css';
+import ArticleImage from './ArticleImage.astro';
+import SocialLinks from './SocialLinks.astro';
+import { projectStackIcon, stackIcon } from '../data/stack';
+import type { Project } from '../data/projects';
+import { homePath, projectPath, type Lang } from '../data/site';
+
+interface Props {
+	project: Project;
+	lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const { article } = project;
+const t = (en: string, es: string) => (lang === 'es' ? es : en);
+const home = homePath(lang);
+const alternates = { en: projectPath('en', project.slug), es: projectPath('es', project.slug) };
+const title = `${article.title[lang]} — Javier Cazares`;
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'Article',
+	headline: article.title[lang],
+	description: article.dek[lang],
+	image: new URL(article.introImage.src, Astro.site).href,
+	inLanguage: lang,
+	mainEntityOfPage: new URL(alternates[lang], Astro.site).href,
+	author: { '@type': 'Person', '@id': new URL('/#person', Astro.site).href, name: 'Javier Cazares', url: Astro.site!.href },
+	keywords: project.stack.join(', '),
+};
+---
+
+<html lang={lang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		{lang === 'en' && <LanguageRedirect to={alternates.es} />}
+		<ThemeInit />
+		<SeoHead title={title} description={article.dek[lang]} lang={lang} alternates={alternates} imageAlt={article.introImage.alt[lang]} ogType="article" structuredData={structuredData} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="site-header">
+			<a class="wordmark" href={`${home}#top`} aria-label="Javier Cazares, home"><Logo size={34} /></a>
+			<div class="header-prompt"><span class="prompt-symbol">›</span> javier@dev-environment:~/projects/{project.slug}$</div>
+			<nav aria-label={t('Project navigation', 'Navegación del proyecto')}>
+				<a href={`${home}#work`}>{t('[ ALL WORK ]', '[ PROYECTOS ]')}</a>
+				<ThemeToggle />
+				<LanguageSwitch lang={lang} alternates={alternates} />
+			</nav>
+		</header>
+
+		<main class="project-page shell">
+			<a class="project-back" href={`${home}#work`}>{t('← BACK TO WORK', '← VOLVER A PROYECTOS')}</a>
+			<header class="article-header">
+				<div class="article-meta"><span>PROJECT_{project.number}</span><span>JAVIER CAZARES</span><span>2026</span></div>
+				<div class="article-type">{project.type[lang]}</div>
+				<div>
+					<h1>{article.title[lang]}</h1>
+					<p class="article-dek">{article.dek[lang]}</p>
+				</div>
+				<div class="article-links">
+					{project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noreferrer"><svg class="article-link-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M2 3h20v18H2zM2 8h20" /><path fill="currentColor" d="M10 11v7l6-3.5z" /></svg>[ {t('TRY THE DEMO', 'PROBAR LA DEMO')} ↗ ]</a>}
+					{project.repositoryUrl && <a href={project.repositoryUrl} target="_blank" rel="noreferrer"><span class="article-link-icon" set:html={stackIcon('github')} />[ {t('VIEW SOURCE', 'VER CÓDIGO')} ↗ ]</a>}
+				</div>
+			</header>
+
+			<div class="article-layout">
+				<aside class="article-aside">
+					<div class="aside-label">{t('IN THIS ENTRY', 'EN ESTA ENTRADA')}</div>
+					<ol>{article.sections[lang].map((section, index) => <li><a href={`#section-${index + 1}`}><span>{String(index + 1).padStart(2, '0')}</span> {section.heading}</a></li>)}</ol>
+					<div class="article-stack-label">{t('BUILT WITH', 'CONSTRUIDO CON')}</div>
+					<ul class="article-stack">{project.stack.map((item) => {
+						const icon = projectStackIcon(item);
+						return <li>{icon && <span class="article-stack-icon" set:html={icon} />}<span>[ {item} ]</span></li>;
+					})}</ul>
+				</aside>
+				<article class="article-body">
+					<div class="article-intro">{article.intro[lang].map((paragraph) => <p>{paragraph}</p>)}</div>
+					<ArticleImage src={article.introImage.src} alt={article.introImage.alt[lang]} caption={article.introImage.caption[lang]} />
+					{article.sections[lang].map((section, index) => (
+						<section class="article-section" id={`section-${index + 1}`}>
+							<div class="article-section-index">{String(index + 1).padStart(2, '0')} <span>/</span></div>
+							<h2>{section.heading}</h2>
+							{section.blocks.map((block) => block.type === 'paragraph'
+								? <p>{block.text}</p>
+								: block.type === 'list'
+									? <ul>{block.items.map((item) => <li>{item}</li>)}</ul>
+									: <ArticleImage src={block.src} alt={block.alt[lang]} caption={block.caption[lang]} />)}
+						</section>
+					))}
+					<footer class="article-footer">
+						<div>{t('WANT TO TALK ABOUT THIS PROJECT?', '¿QUIERES HABLAR DE ESTE PROYECTO?')}</div>
+						<a href={`${home}#contact`}>{t('GET IN TOUCH ↗', 'HABLEMOS ↗')}</a>
+					</footer>
+				</article>
+			</div>
+		</main>
+
+		<footer class="site-footer shell"><a class="footer-mark" href={`${home}#top`} aria-label="Javier Cazares, home"><Logo size={26} /></a><span>{t('MADE WITH INTENTION & A LOT OF COFFEE.', 'HECHO CON INTENCIÓN Y MUCHO CAFÉ.')}</span><SocialLinks compact /><a href="#top" class="back-top">{t('BACK TO TOP ↑', 'VOLVER ARRIBA ↑')}</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
+		<TerminalCursor />
+	</body>
+</html>

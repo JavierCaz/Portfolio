@@ -1,6 +1,6 @@
 # Maker's Terminal
 
-Source for [javiercazares.dev](https://javiercazares.dev), the personal portfolio of Javier Cazares. The site looks like a command-line tool: monospace type, hard borders, square corners and instant hover states. It is available in English and Spanish and has light and dark themes.
+Source for [javiercazares.dev](https://javiercazares.dev), the personal portfolio of Javier Cazares. The site looks like a command-line tool: monospace type, hard borders, square corners and instant hover states. It is available in English (`/`) and Spanish (`/es/`) and has light and dark themes.
 
 ## Stack
 
@@ -39,12 +39,16 @@ To run the dev server in the background, use `npx astro dev --background`. Manag
 │   ├── assets/stack-icons/  # Technology logos used in the stack section
 │   ├── components/          # Astro components (StackBoard, CareerLog, ThemeToggle, …)
 │   ├── data/
+│   │   ├── home.ts          # Home page copy, both languages
+│   │   ├── site.ts          # Localized URL helpers, business details, structured data
 │   │   ├── projects.ts      # Project cards and their article pages
 │   │   ├── stack.ts         # Technologies shown in "The Stack"
 │   │   └── career.ts        # Entries for the git-log-style career timeline
 │   ├── pages/
-│   │   ├── index.astro      # Home: hero, work, stack, career log, contact
-│   │   └── projects/[slug].astro  # Generated article page for each project
+│   │   ├── index.astro      # English home (renders components/HomePage.astro)
+│   │   ├── projects/[slug].astro  # English article page for each project (components/ProjectPage.astro)
+│   │   ├── es/              # Spanish home and es/proyectos/[slug].astro articles
+│   │   └── sitemap.xml.ts   # Sitemap with hreflang alternates
 │   └── styles/global.css    # Tailwind import, @theme tokens, global styles
 ├── worker/index.ts          # Cloudflare Worker: POST /api/contact
 ├── wrangler.jsonc           # Worker, assets binding and custom domain config
@@ -55,11 +59,15 @@ To run the dev server in the background, use `npx astro dev --background`. Manag
 
 Most content is plain TypeScript data, so you rarely need to edit the pages themselves:
 
-- **Projects**: add an entry to [`src/data/projects.ts`](src/data/projects.ts). This creates the home page card and a `/projects/<slug>/` article. [PROJECTS.md](PROJECTS.md) walks through every field.
+- **Projects**: add an entry to [`src/data/projects.ts`](src/data/projects.ts). This creates the home page card plus `/projects/<slug>/` and `/es/proyectos/<slug>/` articles. [PROJECTS.md](PROJECTS.md) walks through every field.
 - **Stack**: add technologies to [`src/data/stack.ts`](src/data/stack.ts) and their icons to `src/assets/stack-icons/`. Icon sources and licenses are listed in [the icons' LICENSE.md](src/assets/stack-icons/LICENSE.md).
 - **Career**: add commits to [`src/data/career.ts`](src/data/career.ts).
 
-All user-facing copy is localized. Data files use `{ en, es }` records, and home page strings live in the `translations` object in [`src/pages/index.astro`](src/pages/index.astro). Update both languages together.
+All user-facing copy is localized. Data files use `{ en, es }` records, and home page strings live in [`src/data/home.ts`](src/data/home.ts). Each language is rendered at build time on its own URL (English at `/`, Spanish under `/es/`), linked with hreflang tags, so both are indexable. Update both languages together.
+
+## SEO
+
+Titles, descriptions, canonical/hreflang links and JSON-LD come from [`src/components/SeoHead.astro`](src/components/SeoHead.astro). The business details (location, service area along the Mexico–US border) are in [`src/data/site.ts`](src/data/site.ts). `sitemap.xml` is generated from the projects list; `public/robots.txt` points to it.
 
 ## Contact form
 

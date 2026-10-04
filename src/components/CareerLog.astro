@@ -1,5 +1,8 @@
 ---
 import { careerLog } from '../data/career';
+import type { Lang } from '../data/site';
+
+const { lang } = Astro.props as { lang: Lang };
 
 // Graph geometry: one fixed-height row per commit, two lanes.
 const ROW = 60;
@@ -15,8 +18,8 @@ const forkRow = branchBottom + 1;
 const [x0, x1] = LANE_X;
 const KINK = 18;
 
-const subject = (entry: (typeof careerLog)[number], language: 'en' | 'es') =>
-	entry.company ? `${entry.title[language]} @ ${entry.company}` : entry.title[language];
+const subject = (entry: (typeof careerLog)[number]) => (entry.company ? `${entry.title[lang]} @ ${entry.company}` : entry.title[lang]);
+const t = (en: string, es: string) => (lang === 'es' ? es : en);
 ---
 
 <div class="career-board" data-career-board>
@@ -45,9 +48,9 @@ const subject = (entry: (typeof careerLog)[number], language: 'en' | 'es') =>
 								<span class="commit-hash">{entry.hash}</span>
 								{entry.refs?.map((ref) => <span class="commit-ref">({ref})</span>)}
 								{entry.merge && <span class="commit-ref is-merge">MERGE</span>}
-								<span class="commit-date"><span data-locale="en">{entry.period.en}</span><span data-locale="es" hidden>{entry.period.es}</span></span>
+								<span class="commit-date">{entry.period[lang]}</span>
 							</span>
-							<span class="commit-subject"><span data-locale="en">{subject(entry, 'en')}</span><span data-locale="es" hidden>{subject(entry, 'es')}</span></span>
+							<span class="commit-subject">{subject(entry)}</span>
 						</button>
 					</li>
 				))}
@@ -60,14 +63,14 @@ const subject = (entry: (typeof careerLog)[number], language: 'en' | 'es') =>
 					<div class="career-panel-body">
 						<pre class="show-header">commit {entry.hash}{entry.refs ? ` (${entry.refs.join(', ')})` : ''}{entry.merge ? `\nMerge: ${entry.merge} → main` : ''}
 Author: Javier Cazares</pre>
-						<p class="show-period"><span data-locale="en">{entry.period.en}</span><span data-locale="es" hidden>{entry.period.es}</span></p>
-						<h3 class="show-title"><span data-locale="en">{entry.title.en}</span><span data-locale="es" hidden>{entry.title.es}</span>{entry.company && <span class="show-company"> @ {entry.company}</span>}</h3>
-						<div class="show-body"><div data-locale="en">{entry.body.en.split('\n\n').map((paragraph) => <p>{paragraph}</p>)}</div><div data-locale="es" hidden>{entry.body.es.split('\n\n').map((paragraph) => <p>{paragraph}</p>)}</div></div>
+						<p class="show-period">{entry.period[lang]}</p>
+						<h3 class="show-title">{entry.title[lang]}{entry.company && <span class="show-company"> @ {entry.company}</span>}</h3>
+						<div class="show-body">{entry.body[lang].split('\n\n').map((paragraph) => <p>{paragraph}</p>)}</div>
 						{entry.tags && <p class="show-tags">{entry.tags.map((tag) => <span>[ {tag} ]</span>)}</p>}
 					</div>
 					<div class="career-nav">
-						<button type="button" data-step="1" disabled={index === careerLog.length - 1}><span data-locale="en">← OLDER</span><span data-locale="es" hidden>← ANTERIOR</span></button>
-						<button type="button" data-step="-1" disabled={index === 0}><span data-locale="en">NEWER →</span><span data-locale="es" hidden>RECIENTE →</span></button>
+						<button type="button" data-step="1" disabled={index === careerLog.length - 1}>{t('← OLDER', '← ANTERIOR')}</button>
+						<button type="button" data-step="-1" disabled={index === 0}>{t('NEWER →', 'RECIENTE →')}</button>
 					</div>
 				</article>
 			))}

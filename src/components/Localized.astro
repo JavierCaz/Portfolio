@@ -1,9 +1,0 @@
----
-import type { ProjectLanguage } from '../data/projects';
-
-type Props = { text: Record<ProjectLanguage, string> };
-
-const { text } = Astro.props;
----
-
-<span data-locale="en">{text.en}</span><span data-locale="es" hidden>{text.es}</span>

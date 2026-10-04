@@ -1,6 +1,6 @@
 # Adding a project
 
-Project cards and project articles are generated from [`src/data/projects.ts`](src/data/projects.ts). Add one object to the `projects` array and the portfolio card and `/projects/<slug>/` article page are created from it.
+Project cards and project articles are generated from [`src/data/projects.ts`](src/data/projects.ts). Add one object to the `projects` array and the portfolio card, the `/projects/<slug>/` article and its Spanish twin at `/es/proyectos/<slug>/` are created from it (and added to the sitemap).
 
 ## What to edit
 
@@ -21,7 +21,7 @@ Project cards and project articles are generated from [`src/data/projects.ts`](s
 
 6. Set `article.introImage` to add a figure after the introduction paragraphs. To add more images within an article, insert another `type: 'image'` block wherever it belongs in a section’s `blocks` list.
 
-The homepage card and article URL are generated automatically. The article template is [`src/pages/projects/[slug].astro`](src/pages/projects/%5Bslug%5D.astro). You only need to change that template or the homepage when you want a new layout or a different card treatment. Each card's art comes from `cardArt` (the two-line wordmark, a localized tag line, and a theme class) plus the optional `cardImage` screenshot (1200×792). To give a project its own colours, add a theme class next to `.art-atlas` / `.art-ledger` in `src/styles/global.css`.
+The homepage card and article URL are generated automatically. The article template is [`src/components/ProjectPage.astro`](src/components/ProjectPage.astro). You only need to change that template or the homepage when you want a new layout or a different card treatment. Each card's art comes from `cardArt` (the two-line wordmark, a localized tag line, and a theme class) plus the optional `cardImage` screenshot (1200×792). To give a project its own colours, add a theme class next to `.art-atlas` / `.art-ledger` in `src/styles/global.css`.
 
 ## First project: Debatra
 

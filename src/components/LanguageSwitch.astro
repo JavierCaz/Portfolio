@@ -1,0 +1,26 @@
+---
+import type { Lang } from '../data/site';
+
+interface Props {
+	lang: Lang;
+	/** Path of the current page in each language. */
+	alternates: Record<Lang, string>;
+}
+
+const { lang, alternates } = Astro.props;
+---
+
+<div class="language-switch" role="group" aria-label={lang === 'es' ? 'Elegir idioma' : 'Choose language'}>
+	<a href={alternates.en} hreflang="en" lang="en" data-language="en" aria-current={lang === 'en' ? 'page' : undefined}>EN</a>
+	<span aria-hidden="true">/</span>
+	<a href={alternates.es} hreflang="es" lang="es" data-language="es" aria-current={lang === 'es' ? 'page' : undefined}>ES</a>
+</div>
+
+<script>
+	// Remember an explicit choice so LanguageRedirect stops second-guessing it.
+	document.querySelectorAll<HTMLAnchorElement>('.language-switch a[data-language]').forEach((link) =>
+		link.addEventListener('click', () => {
+			try { localStorage.setItem('portfolio-language', link.dataset.language!); } catch {}
+		}),
+	);
+</script>

@@ -1,0 +1,18 @@
+---
+/**
+ * On English pages only: send visitors who chose Spanish (or whose browser prefers it) to the Spanish URL.
+ * Crawlers get the English page as-is and reach /es/ through the hreflang links, so both versions stay indexable.
+ */
+interface Props {
+	to: string;
+}
+
+const { to } = Astro.props;
+---
+
+<script is:inline define:vars={{ to }}>
+	let saved;
+	try { saved = localStorage.getItem('portfolio-language'); } catch {}
+	const browser = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+	if (saved === 'es' || (saved !== 'en' && /^es(-|$)/i.test(browser))) location.replace(to + location.hash);
+</script>
