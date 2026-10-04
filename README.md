@@ -74,7 +74,7 @@ Titles, descriptions, canonical/hreflang links and JSON-LD come from [`src/compo
 The form posts to `/api/contact`. [`wrangler.jsonc`](wrangler.jsonc) sends only `/api/*` requests to the Worker; static assets serve everything else. The Worker:
 
 1. drops submissions that fill the honeypot field,
-2. checks the message (5,000 characters max) and the optional reply email,
+2. checks the message (5,000 characters max), the required reply email, and the optional project brief (choice fields are allowlisted, text fields are capped),
 3. verifies the Turnstile token,
 4. sends the message to `CONTACT_TO` through Resend.
 

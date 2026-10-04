@@ -14,6 +14,7 @@ import LocalClock from './LocalClock.astro';
 import '../styles/global.css';
 import { projects } from '../data/projects';
 import { homeCopy } from '../data/home';
+import { budgetLabel, budgetSteps, currencies } from '../data/budget';
 import { homePath, homeStructuredData, projectPath, type Lang } from '../data/site';
 
 interface Props {
@@ -23,6 +24,8 @@ interface Props {
 const { lang } = Astro.props;
 const t = homeCopy[lang];
 const alternates = { en: homePath('en'), es: homePath('es') };
+const brief = t.brief;
+const chipOptions = (group: { options: Record<string, string> }) => Object.entries(group.options);
 const structuredData = homeStructuredData(Astro.site!, lang, { description: t.metaDescription, services: t.services });
 
 // Falls back to Cloudflare's always-pass test key for local dev.
@@ -154,12 +157,77 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 			<section class="contact-section shell" id="contact" aria-labelledby="contact-title">
 				<div class="contact-top"><span class="section-index">{t.contactIndex}</span><span class="contact-status"><span class="status-dot"></span> <span>{t.contactStatus}</span></span></div>
 				<div class="contact-content">
-					<div><p class="command-line"><span>&gt;</span> <span>{t.contactCommand}</span></p><h2 id="contact-title"><span set:html={t.contactTitle} /><span class="highlight">?</span><span class="cursor">_</span></h2><p class="contact-copy" set:html={t.contactCopy} /></div>
+					<div><p class="command-line"><span>&gt;</span> <span>{t.contactCommand}</span></p><h2 id="contact-title"><span set:html={t.contactTitle} /><span class="highlight">?</span><span class="cursor">_</span></h2><p class="contact-copy" set:html={t.contactCopy} />
+						<div class="terms">
+							<div class="panel-bar" aria-hidden="true"><span>$ {t.terms.command}</span><span>{t.terms.items.length}</span></div>
+							<dl class="terms-list">
+								{t.terms.items.map((item) => (
+									<div class="terms-row">
+										<dt>{item.key}</dt>
+										<dd>
+											{item.body}
+											{item.milestones && (
+												<ol class="milestones">
+													{item.milestones.map((step) => <li style={`flex-grow: ${step.pct}`}><b>{step.pct}%</b><span>{step.label}</span></li>)}
+												</ol>
+											)}
+										</dd>
+									</div>
+								))}
+							</dl>
+						</div>
+					</div>
 					<form id="idea-form" class="idea-form" data-messages={JSON.stringify(t.formMessages)}>
 						<label for="idea" set:html={t.ideaLabel} />
 						<textarea id="idea" name="idea" rows="4" maxlength="5000" placeholder={t.ideaPlaceholder} required></textarea>
 						<label for="idea-email" class="email-label" set:html={t.emailLabel} />
-						<input id="idea-email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" />
+						<input id="idea-email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" required />
+						<details class="brief">
+							<summary>[ <span class="brief-sign" aria-hidden="true"></span> {brief.toggle} <span class="brief-optional">{brief.optional}</span> ]</summary>
+							<p class="brief-intro">{brief.intro}</p>
+							<div class="brief-row">
+								<label for="brief-company" class="brief-key">{brief.company.label}</label>
+								<input id="brief-company" name="company" type="text" maxlength="500" autocomplete="organization" placeholder={brief.company.placeholder} />
+							</div>
+							<fieldset class="brief-row">
+								<legend class="brief-key">{brief.budget.label} <span class="brief-hint"># {brief.budget.hint}</span></legend>
+								<div class="budget" data-unset={brief.budget.unset}>
+									<div class="budget-head">
+										<output id="budget-readout" class="budget-readout" for="brief-budget">{brief.budget.unset}</output>
+										<div class="chips">{currencies.map((currency) => <label class="chip"><input type="radio" name="currency" value={currency} checked={currency === brief.budget.currency} /><span>{currency.toUpperCase()}</span></label>)}</div>
+									</div>
+									<input id="brief-budget" class="budget-range" name="budget" type="range" min="0" max={budgetSteps - 1} step="1" value={Math.floor(budgetSteps / 2)} aria-label={brief.budget.label} aria-valuetext={brief.budget.unset} />
+									<div class="budget-scale" aria-hidden="true"><span>{budgetLabel(0, brief.budget.currency)}</span><span>{budgetLabel(budgetSteps - 1, brief.budget.currency)}</span></div>
+								</div>
+							</fieldset>
+							<fieldset class="brief-row">
+								<legend class="brief-key">{brief.timeline.label}</legend>
+								<div class="chips">{chipOptions(brief.timeline).map(([value, label]) => <label class="chip"><input type="radio" name="timeline" value={value} /><span>{label}</span></label>)}</div>
+								<input name="deadline" type="text" maxlength="500" aria-label={brief.timeline.placeholder} placeholder={brief.timeline.placeholder} />
+							</fieldset>
+							<div class="brief-row">
+								<label for="brief-users" class="brief-key">{brief.users.label}</label>
+								<input id="brief-users" name="users" type="text" maxlength="500" placeholder={brief.users.placeholder} />
+							</div>
+							<div class="brief-row">
+								<label for="brief-current" class="brief-key">{brief.current.label}</label>
+								<input id="brief-current" name="current" type="text" maxlength="500" placeholder={brief.current.placeholder} />
+							</div>
+							<div class="brief-row">
+								<label for="brief-integrations" class="brief-key">{brief.integrations.label}</label>
+								<input id="brief-integrations" name="integrations" type="text" maxlength="500" placeholder={brief.integrations.placeholder} />
+							</div>
+							<div class="brief-row">
+								<label for="brief-mvp" class="brief-key">{brief.mvp.label}</label>
+								<textarea id="brief-mvp" name="mvp" rows="3" maxlength="2000" placeholder={brief.mvp.placeholder}></textarea>
+							</div>
+							{(['devices', 'access', 'infra'] as const).map((name) => (
+								<fieldset class="brief-row">
+									<legend class="brief-key">{brief[name].label} <span class="brief-hint"># {brief[name].hint}</span></legend>
+									<div class="chips">{chipOptions(brief[name]).map(([value, label]) => <label class="chip"><input type={name === 'devices' ? 'checkbox' : 'radio'} name={name} value={value} /><span>{label}</span></label>)}</div>
+								</fieldset>
+							))}
+						</details>
 						<input class="honeypot" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
 						<div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto" data-size="flexible" data-language={lang}></div>
 						<div class="form-bottom"><span id="form-feedback" aria-live="polite">{t.formHelp}</span><button type="submit"><span>{t.sendNote}</span> <span aria-hidden="true">↗</span> ]</button></div>
@@ -170,30 +238,71 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 
 		<footer class="site-footer shell"><a class="footer-mark" href="#top" aria-label="Javier Cazares, back to top"><Logo size={26} /></a><span set:html={t.footerMade} /><SocialLinks compact /><a href="#top" class="back-top">{t.backTop}</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
 		<script>
+			import { budgetLabel, budgetSteps, isCurrency, type Currency } from '../data/budget';
+
 			const form = document.querySelector<HTMLFormElement>('#idea-form');
 			const field = document.querySelector<HTMLTextAreaElement>('#idea');
 			const feedback = document.querySelector<HTMLElement>('#form-feedback');
 			const submitButton = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
 			const messages: Record<string, string> = JSON.parse(form?.dataset.messages ?? '{}');
 			const say = (key: string) => { if (feedback) feedback.textContent = messages[key] ?? ''; };
+
+			// Budget range picker. The slider always has a value, so it only counts once the visitor touches it.
+			const budgetBox = form?.querySelector<HTMLElement>('.budget');
+			const budget = form?.querySelector<HTMLInputElement>('#brief-budget');
+			const readout = form?.querySelector<HTMLOutputElement>('#budget-readout');
+			const scale = budgetBox?.querySelectorAll<HTMLElement>('.budget-scale span');
+			let budgetTouched = false;
+			const currency = (): Currency => {
+				const value = form?.querySelector<HTMLInputElement>('input[name="currency"]:checked')?.value ?? '';
+				return isCurrency(value) ? value : 'usd';
+			};
+			const currentBudget = () => (budgetTouched && budget ? budgetLabel(Number(budget.value), currency()) : null);
+			const renderBudget = () => {
+				if (!budgetBox || !budget || !readout) return;
+				const label = currentBudget() ?? budgetBox.dataset.unset ?? '';
+				readout.textContent = label;
+				budget.setAttribute('aria-valuetext', label);
+				budgetBox.toggleAttribute('data-touched', budgetTouched);
+				scale?.forEach((end, i) => { end.textContent = budgetLabel(i === 0 ? 0 : budgetSteps - 1, currency()); });
+			};
+			const touchBudget = () => { budgetTouched = true; renderBudget(); };
+			budget?.addEventListener('input', touchBudget);
+			budget?.addEventListener('pointerup', touchBudget);
+			form?.addEventListener('change', (event) => { if ((event.target as HTMLInputElement).name === 'currency') renderBudget(); });
+			// Native reset restores the inputs after this event fires, so re-render on the next tick.
+			form?.addEventListener('reset', () => { budgetTouched = false; setTimeout(renderBudget); });
+
+			const payload = () => {
+				const data = new FormData(form ?? undefined);
+				if (!budgetTouched) { data.delete('budget'); data.delete('currency'); }
+				return data;
+			};
+			const hidden = new Set(['website', 'cf-turnstile-response', 'currency']);
+			// Plain-text copy of every filled field, used when the send fails.
+			const summarize = (data: FormData) => [...data.entries()]
+				.filter(([key, value]) => !hidden.has(key) && String(value).trim())
+				.map(([key, value]) => `${key}: ${key === 'budget' ? currentBudget() : String(value).trim()}`)
+				.join('\n');
 			form?.addEventListener('submit', async (event) => {
 				event.preventDefault();
 				if (!field?.value.trim() || !feedback || !submitButton) return;
 				submitButton.disabled = true;
 				say('sending');
 				try {
-					const response = await fetch('/api/contact', { method: 'POST', body: new FormData(form) });
+					const response = await fetch('/api/contact', { method: 'POST', body: payload() });
 					const result = await response.json().catch(() => ({ ok: false }));
 					if (result.ok) {
 						form.reset();
+						form.querySelector('details')?.removeAttribute('open');
 						say('sent');
-					} else if (result.error === 'captcha') {
-						say('captcha');
+					} else if (result.error === 'captcha' || result.error === 'invalid_email') {
+						say(result.error === 'captcha' ? 'captcha' : 'email');
 					} else {
 						throw new Error(result.error);
 					}
 				} catch {
-					await navigator.clipboard.writeText(field.value.trim()).catch(() => field.select());
+					await navigator.clipboard.writeText(summarize(payload())).catch(() => field.select());
 					say('failed');
 				} finally {
 					window.turnstile?.reset();

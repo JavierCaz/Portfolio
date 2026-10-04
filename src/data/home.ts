@@ -1,4 +1,5 @@
 import type { Lang } from './site';
+import type { Currency } from './budget';
 
 /** Home page copy. Strings may contain inline HTML (highlights, line breaks); they are rendered with set:html. */
 const en = {
@@ -28,10 +29,40 @@ const en = {
 	careerIndex: '04 / THE LOG', careerTitle: 'How I got here', careerIntro: 'A career, read like a git log. Pick a commit.',
 	contactIndex: '05 / YOUR TURN', contactStatus: 'OPEN TO GOOD IDEAS', contactCommand: './say-hello', contactTitle: 'Got a good<br />one',
 	contactCopy: 'A project, a question, a half-formed thought.<br />I’m listening.', ideaLabel: '&gt; SYSTEM READY. DROP YOUR IDEA BELOW:',
-	ideaPlaceholder: 'I’ve been thinking about...', formHelp: 'GOES STRAIGHT TO MY INBOX.', sendNote: '[ EXECUTE SEND', emailLabel: '&gt; REPLY TO (OPTIONAL):',
+	ideaPlaceholder: 'I’ve been thinking about...', formHelp: 'GOES STRAIGHT TO MY INBOX.', sendNote: '[ EXECUTE SEND', emailLabel: '&gt; REPLY TO:',
 	footerMade: 'MADE WITH INTENTION &amp; A LOT OF COFFEE.', backTop: 'BACK TO TOP ↑',
 	formMessages: {
 		sending: 'TRANSMITTING...', sent: 'RECEIVED. I’LL GET BACK TO YOU.', captcha: 'VERIFICATION PENDING. TRY AGAIN IN A SECOND.', failed: 'SEND FAILED. YOUR NOTE WAS COPIED — EMAIL IT TO ME.',
+		email: 'I NEED A VALID EMAIL TO REPLY.',
+	},
+	// "How I work" terms block in the contact section. A row with `milestones` renders the payment bar.
+	terms: {
+		command: 'cat ~/how-i-work',
+		items: [
+			{ key: 'first_step:', body: 'A free 30-minute call, then a written proposal. For larger projects, a short paid discovery phase that is credited toward development.' },
+			{ key: 'scope:', body: 'A proposal per phase with fixed scope, timeline and cost. Must-haves first; the rest waits for a later phase.' },
+			{ key: 'costs:', body: 'Development and infrastructure are separate. Hosting and services are paid by you directly or billed apart, never buried in the price.' },
+			{ key: 'payments:', body: 'Paid by milestone, each released after a demo you approve. Work on the next milestone starts once the previous one is paid.', milestones: [{ pct: 30, label: 'START' }, { pct: 25, label: 'MILESTONE 1' }, { pct: 25, label: 'MILESTONE 2' }, { pct: 20, label: 'GO-LIVE' }] },
+			{ key: 'support:', body: '30 days of bug fixes on what was delivered, included after launch.' },
+			{ key: 'after_launch:', body: 'A monthly maintenance plan or a bank of hours: monitoring, backups, small updates and support, sized to the SLA you need.' },
+			{ key: 'changes:', body: 'Changes go through a written request with time and cost before work starts. New modules are quoted separately.' },
+			{ key: 'ownership:', body: 'Code, data and cloud accounts are yours. Infrastructure is set up under your accounts; full code handover with the final payment.' },
+		],
+	},
+	// Option keys are the values the worker allowlists; keep them identical across languages.
+	brief: {
+		toggle: 'PROJECT BRIEF', optional: '(OPTIONAL)',
+		intro: '# More context = a sharper first proposal. Skip anything you don’t know yet.',
+		company: { label: 'who:', placeholder: 'Your name / company' },
+		budget: { label: 'budget:', hint: 'Drag to set. Skip if unsure.', unset: '— NOT SET —', currency: 'usd' as Currency },
+		timeline: { label: 'timeline:', options: { asap: 'ASAP', '1-3m': '1–3 MONTHS', '3-6m': '3–6 MONTHS', flexible: 'FLEXIBLE' }, placeholder: 'Target date or event? e.g. needs to run for a March audit' },
+		users: { label: 'users:', placeholder: 'How many people, which roles? e.g. ~20 — admin, coordinators, inspectors' },
+		current: { label: 'current_process:', placeholder: 'How is it done today? Excel, WhatsApp, paper, other software…' },
+		integrations: { label: 'integrations:', placeholder: 'Systems to connect or data to import: ERP, accounting, invoicing (CFDI), existing Excel files…' },
+		devices: { label: 'devices:', hint: 'What will people use it on? Pick all that apply.', options: { desktop: 'OFFICE COMPUTERS', mobile: 'PHONES / TABLETS', offline: 'MOBILE, SOMETIMES NO SIGNAL', unsure: 'NOT SURE' } },
+		mvp: { label: 'must_have_v1:', placeholder: 'What is indispensable for a first version?' },
+		access: { label: 'access:', hint: 'Where will people use it from?', options: { internal: 'INTERNAL NETWORK / VPN ONLY', internet: 'ANYWHERE (INTERNET)', unsure: 'NOT SURE' } },
+		infra: { label: 'infra:', hint: 'Servers / cloud', options: { have: 'WE ALREADY HAVE ONE', propose: 'PROPOSE ONE FOR US', unsure: 'NOT SURE' } },
 	},
 };
 
@@ -62,10 +93,38 @@ const es: typeof en = {
 	careerIndex: '04 / EL LOG', careerTitle: 'Cómo llegué aquí', careerIntro: 'Una trayectoria, leída como un git log. Elige un commit.',
 	contactIndex: '05 / TU TURNO', contactStatus: 'ABIERTO A BUENAS IDEAS', contactCommand: './di-hola', contactTitle: '¿Tienes una<br />buena idea',
 	contactCopy: 'Un proyecto, una pregunta, una idea a medio formar.<br />Te leo.', ideaLabel: '&gt; SISTEMA LISTO. CUÉNTAME TU IDEA:',
-	ideaPlaceholder: 'He estado pensando en...', formHelp: 'LLEGA DIRECTO A MI BANDEJA.', sendNote: '[ EJECUTAR ENVÍO', emailLabel: '&gt; RESPONDER A (OPCIONAL):',
+	ideaPlaceholder: 'He estado pensando en...', formHelp: 'LLEGA DIRECTO A MI BANDEJA.', sendNote: '[ EJECUTAR ENVÍO', emailLabel: '&gt; RESPONDER A:',
 	footerMade: 'HECHO CON INTENCIÓN Y MUCHO CAFÉ.', backTop: 'VOLVER ARRIBA ↑',
 	formMessages: {
 		sending: 'TRANSMITIENDO...', sent: 'RECIBIDO. TE RESPONDO PRONTO.', captcha: 'VERIFICACIÓN PENDIENTE. INTENTA DE NUEVO EN UN SEGUNDO.', failed: 'FALLÓ EL ENVÍO. TU MENSAJE SE COPIÓ — ENVÍAMELO POR CORREO.',
+		email: 'NECESITO UN CORREO VÁLIDO PARA RESPONDERTE.',
+	},
+	terms: {
+		command: 'cat ~/como-trabajo',
+		items: [
+			{ key: 'primer_paso:', body: 'Una llamada gratuita de 30 minutos y después una propuesta por escrito. En proyectos grandes, una fase corta de descubrimiento pagada que se abona al desarrollo.' },
+			{ key: 'alcance:', body: 'Una propuesta por etapa con alcance, tiempos y costo definidos. Primero lo indispensable; lo demás, en fases posteriores.' },
+			{ key: 'costos:', body: 'Desarrollo e infraestructura van por separado. El hosting y los servicios los pagas directo o se facturan aparte, nunca escondidos en el precio.' },
+			{ key: 'pagos:', body: 'Por hitos, cada uno se libera tras una demo que apruebas. El siguiente hito arranca cuando el anterior está pagado.', milestones: [{ pct: 30, label: 'ANTICIPO' }, { pct: 25, label: 'HITO 1' }, { pct: 25, label: 'HITO 2' }, { pct: 20, label: 'ENTREGA' }] },
+			{ key: 'soporte:', body: '30 días de corrección de errores sobre lo entregado, incluidos después del lanzamiento.' },
+			{ key: 'después:', body: 'Mensualidad de mantenimiento o bolsa de horas: monitoreo, respaldos, actualizaciones pequeñas y soporte, según el SLA que necesites.' },
+			{ key: 'cambios:', body: 'Los cambios van por solicitud escrita con tiempo y costo antes de empezar. Módulos nuevos se cotizan aparte.' },
+			{ key: 'propiedad:', body: 'El código, los datos y las cuentas de nube son tuyos. La infraestructura se configura en tus cuentas; entrega completa del código con el pago final.' },
+		],
+	},
+	brief: {
+		toggle: 'DETALLES DEL PROYECTO', optional: '(OPCIONAL)',
+		intro: '# Más contexto = una primera propuesta más aterrizada. Omite lo que aún no sepas.',
+		company: { label: 'quién:', placeholder: 'Tu nombre / empresa' },
+		budget: { label: 'presupuesto:', hint: 'Desliza para elegir. Omítelo si no sabes.', unset: '— SIN DEFINIR —', currency: 'mxn' },
+		timeline: { label: 'tiempos:', options: { asap: 'LO ANTES POSIBLE', '1-3m': '1–3 MESES', '3-6m': '3–6 MESES', flexible: 'FLEXIBLE' }, placeholder: '¿Fecha objetivo o evento? ej. debe funcionar para una auditoría en marzo' },
+		users: { label: 'usuarios:', placeholder: '¿Cuántas personas y qué roles? ej. ~20 — admin, coordinadores, inspectores' },
+		current: { label: 'proceso_actual:', placeholder: '¿Cómo lo llevan hoy? Excel, WhatsApp, papel, otro software…' },
+		integrations: { label: 'integraciones:', placeholder: 'Sistemas a conectar o datos a importar: ERP, contabilidad, facturación (CFDI), archivos de Excel…' },
+		devices: { label: 'dispositivos:', hint: '¿En qué lo van a usar? Elige todas las que apliquen.', options: { desktop: 'COMPUTADORAS DE OFICINA', mobile: 'CELULARES / TABLETS', offline: 'MÓVIL, A VECES SIN SEÑAL', unsure: 'NO ESTOY SEGURO' } },
+		mvp: { label: 'indispensable_v1:', placeholder: '¿Qué es indispensable para una primera versión?' },
+		access: { label: 'acceso:', hint: '¿Desde dónde se usará?', options: { internal: 'SOLO RED INTERNA / VPN', internet: 'DESDE CUALQUIER LUGAR (INTERNET)', unsure: 'NO ESTOY SEGURO' } },
+		infra: { label: 'infraestructura:', hint: 'Servidores / nube', options: { have: 'YA TENEMOS', propose: 'PROPÓNLA TÚ', unsure: 'NO ESTOY SEGURO' } },
 	},
 };
 
