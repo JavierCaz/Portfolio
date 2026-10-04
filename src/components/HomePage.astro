@@ -11,6 +11,7 @@ import CareerLog from './CareerLog.astro';
 import SocialLinks from './SocialLinks.astro';
 import HeroPortrait from './HeroPortrait.astro';
 import LocalClock from './LocalClock.astro';
+import ServiceArt from './ServiceArt.astro';
 import '../styles/global.css';
 import { projects } from '../data/projects';
 import { homeCopy } from '../data/home';
@@ -89,18 +90,23 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 					<p>{t.servicesIntro}</p>
 				</div>
 				<div class="services-board">
-					<div class="panel-bar" aria-hidden="true"><span>$ ls ~/services</span><span>{t.services.length}</span></div>
+					<div class="panel-bar" aria-hidden="true"><span>$ ls ~/services --long</span><span>{t.services.length} {lang === 'es' ? 'SERVICIOS' : 'SERVICES'}</span></div>
 					<ul class="service-grid">
 						{t.services.map((service, index) => (
 							<li class="service-item">
-								<span class="service-command" aria-hidden="true"><b>{String(index + 1).padStart(2, '0')}</b> {service.command}</span>
-								<h3>{service.title}</h3>
+								<span class="service-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+								<span class="service-command" aria-hidden="true"><b>$</b> {service.command}</span>
+								<ServiceArt index={index} />
+								<h3>{service.title}<span class="cursor" aria-hidden="true">_</span></h3>
 								<p>{service.body}</p>
+								<ul class="service-tags">{service.tags.map((tag) => <li>[ {tag} ]</li>)}</ul>
 							</li>
 						))}
 					</ul>
 					<div class="services-foot">
-						<p><span class="prompt-symbol">›</span>{t.servicesArea}</p>
+						<pre class="service-map" aria-hidden="true"><b>CD. JUÁREZ</b> ====|==== EL PASO
+    <b>^</b>       MX : US</pre>
+						<p>{t.servicesArea}</p>
 						<a class="text-link" href="#contact">[ {t.servicesCta} <span aria-hidden="true">↗</span> ]</a>
 					</div>
 				</div>

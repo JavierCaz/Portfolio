@@ -1,0 +1,37 @@
+---
+/**
+ * Language-neutral ASCII schematics for the services cards, one per service in order. <b> marks the green highlights.
+ * Plain ASCII only: the Google Fonts subset has no box-drawing glyphs, and fallback fonts break the alignment.
+ */
+interface Props {
+	index: number;
+}
+
+const { index } = Astro.props;
+
+const art = [
+	// Custom web apps: a business dashboard.
+	`+-----------------------------+
+| o o o  app.your-business    |
++-------+---------------------+
+| = ord |  <b>.:|:||:|||</b>  <b>+18%</b>   |
+| = inv |  [ 42 ] [ 07 ] [ $ ]|
+| = crm |                     |
++-------+---------------------+`,
+	// Internal tools & automation: scattered inputs into one flow.
+	` excel    --+
+ email    --+--> <b>[ sync ]</b>--> [ <b>ok</b> ]
+ whatsapp --+        |
+                     +--> report.pdf`,
+	// MVPs: from idea to a live first version.
+	` idea ---> v0.1 ---> v1.0 ---> live
+  .         <b>o</b>         <b>O</b>         <b>@</b>
+ ..........::::::::::==========<b>#####</b>`,
+	// Modernization & integrations: everything wired to one core.
+	` [ ERP ]--+           +--[ PAY ]
+          +--<b>[ APP ]</b>--+
+ [ CFDI ]-+           +--[ API ]`,
+];
+---
+
+<pre class="service-art" aria-hidden="true" set:html={art[index]} />

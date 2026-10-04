@@ -214,17 +214,28 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .services-section { padding: 75px 0 82px; border-bottom: 1px solid var(--line); }
 .services-board { border: 1px solid var(--line-strong); background: var(--panel); box-shadow: 5px 5px 0 var(--shadow); }
 .service-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.service-item { padding: 22px 24px 24px; border-bottom: 1px solid var(--line); }
+/* Each service reads like a command's output; hover inverts the whole cell, like a selected line. */
+.service-item { position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 22px 24px 24px; border-bottom: 1px solid var(--line); }
 .service-item:nth-child(odd) { border-right: 1px solid var(--line); }
-.service-item:hover { background: var(--panel-2); }
-.service-item:hover .service-command { background: var(--green-fill); color: var(--on-green); }
-.service-item:hover .service-command b { color: inherit; }
-.service-command { display: inline-block; padding: 1px 4px; margin-left: -4px; color: var(--muted); font-size: 9px; letter-spacing: .06em; }
-.service-command b { color: var(--green); font-weight: 500; margin-right: 6px; }
-.service-item h3 { font-size: 15px; letter-spacing: -.04em; font-weight: 500; margin: 12px 0 6px; }
+.service-number { position: absolute; top: 4px; right: 18px; font-size: 92px; line-height: 1; font-weight: 700; letter-spacing: -.08em; color: transparent; -webkit-text-stroke: 1px var(--line-strong); pointer-events: none; }
+.service-command { color: var(--muted); font-size: 9px; letter-spacing: .06em; }
+.service-command b { color: var(--green); font-weight: 500; margin-right: 4px; }
+.service-art { position: relative; align-self: flex-start; margin: 16px 0 20px; padding: 12px 14px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); font: inherit; font-size: 11px; line-height: 1.2; overflow-x: auto; max-width: 100%; box-shadow: 4px 4px 0 var(--shadow); }
+.service-art b { color: var(--green); font-weight: 500; }
+.service-item h3 { font-size: 15px; letter-spacing: -.04em; font-weight: 500; margin: 0 0 6px; }
+.service-item h3 .cursor { visibility: hidden; animation: none; margin-left: 2px; }
 .service-item p { color: var(--fg-2); font-size: 11px; margin: 0; max-width: 470px; }
-.services-foot { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 18px 24px; }
-.services-foot p { color: var(--fg-2); font-size: 10px; margin: 0; max-width: 720px; }
+.service-tags { list-style: none; margin: auto 0 0; padding: 16px 0 0; display: flex; flex-wrap: wrap; gap: 6px 10px; color: var(--fg-1); font-size: 8px; letter-spacing: .06em; }
+.service-item:hover { background: var(--green-fill); color: var(--on-green); }
+.service-item:hover .service-number { -webkit-text-stroke-color: var(--on-green); }
+.service-item:hover .service-command, .service-item:hover .service-command b, .service-item:hover p, .service-item:hover .service-tags { color: var(--on-green); }
+.service-item:hover .service-art { background: var(--on-green); border-color: var(--on-green); color: var(--green-fill); box-shadow: 4px 4px 0 var(--fg); }
+.service-item:hover .service-art b { background: var(--green-fill); color: var(--on-green); }
+.service-item:hover h3 .cursor { visibility: visible; color: inherit; animation: blink 1.05s steps(2, start) infinite; }
+.services-foot { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 28px; padding: 18px 24px; }
+.service-map { margin: 0; padding: 10px 12px; border: 1px dashed var(--line-strong); color: var(--muted); font: inherit; font-size: 9px; line-height: 1.5; overflow-x: auto; }
+.service-map b { color: var(--green); font-weight: 500; }
+.services-foot p { color: var(--fg-2); font-size: 10px; margin: 0; }
 .stack-section { padding: 75px 0 82px; border-bottom: 1px solid var(--line); }
 .compact-heading { margin-bottom: 26px; }.compact-heading > p { text-align: right; }
 .stack-board { border: 1px solid var(--line-strong); background: var(--panel); box-shadow: 5px 5px 0 var(--shadow); }
@@ -472,6 +483,8 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .article-footer a:hover { background: var(--green-fill); color: var(--on-green); }
 
 @media (max-width: 800px) {
+	.services-foot { grid-template-columns: minmax(0, 1fr) auto; }.service-map { grid-column: 1 / -1; justify-self: start; }
+	.service-number { font-size: 60px; right: 12px; }
 	.shell { width: min(100% - 44px, 650px); }
 	.site-header { padding-inline: 22px; grid-template-columns: 45px 1fr auto; gap: 10px; }
 	.header-prompt { font-size: 9px; }
@@ -508,7 +521,9 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 	.services-section, .work-section, .stack-section, .career-section { padding: 57px 0 60px; }
 	.service-grid { grid-template-columns: 1fr; }
 	.service-item { padding: 18px 16px 20px; }.service-item:nth-child(odd) { border-right: 0; }
-	.services-foot { display: block; padding: 16px; }.services-foot .text-link { display: inline-block; margin-top: 14px; }
+	.service-number { font-size: 70px; }
+	.service-art { font-size: 10px; }
+	.services-foot { display: block; padding: 16px; }.services-foot p { margin-top: 14px; }.services-foot .text-link { display: inline-block; margin-top: 14px; }
 	.section-heading { display: block; margin-bottom: 20px; }
 	.section-heading > p { text-align: left; margin-top: 12px; }
 	.project-grid { grid-template-columns: 1fr; gap: 22px; }
