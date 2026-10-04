@@ -32,3 +32,7 @@ When adding more projects, keep technical claims and roadmap status accurate, an
 ## Second project: PayTrack
 
 PayTrack is the second entry. Its story comes from the earlier WordPress posts. Its screenshots were taken from the [PayTrack repository](https://github.com/JavierCaz/PayTrack) running on web with the bundled `test-data.json`, using real SQLite (sql.js) in place of the web build's in-memory shim, which can't run the dashboard queries. The intro image is the promotional graphic from the old site. The article has no roadmap section because no planned work was documented.
+
+## Third project: Anvil
+
+Anvil is the third entry. Its content comes from the [Anvil repository](https://github.com/JavierCaz/anvil) source and its project brief (`AGENTS.md`). The screenshots were taken from a scratch copy of the repository running on web, seeded with about twelve weeks of push/pull/legs history that went through the app's own PR and achievement logic; the recap, rest timer, and milestone notification come from a Leg Day session driven in the browser. The diagrams were rendered from HTML in the same palette as the app. The roadmap section lists features from the original brief that are not implemented yet.

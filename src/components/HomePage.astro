@@ -158,8 +158,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 				<div class="contact-top"><span class="section-index">{t.contactIndex}</span><span class="contact-status"><span class="status-dot"></span> <span>{t.contactStatus}</span></span></div>
 				<div class="contact-content">
 					<div><p class="command-line"><span>&gt;</span> <span>{t.contactCommand}</span></p><h2 id="contact-title"><span set:html={t.contactTitle} /><span class="highlight">?</span><span class="cursor">_</span></h2><p class="contact-copy" set:html={t.contactCopy} />
-						<div class="terms">
-							<div class="panel-bar" aria-hidden="true"><span>$ {t.terms.command}</span><span>{t.terms.items.length}</span></div>
+						<details class="terms">
+							<summary class="panel-bar"><span>$ {t.terms.command}</span><span class="terms-toggle">[ <span class="terms-sign" aria-hidden="true"></span> ]</span></summary>
 							<dl class="terms-list">
 								{t.terms.items.map((item) => (
 									<div class="terms-row">
@@ -175,7 +175,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000
 									</div>
 								))}
 							</dl>
-						</div>
+						</details>
 					</div>
 					<form id="idea-form" class="idea-form" data-messages={JSON.stringify(t.formMessages)}>
 						<label for="idea" set:html={t.ideaLabel} />

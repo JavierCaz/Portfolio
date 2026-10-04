@@ -187,6 +187,9 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .art-ledger .atlas-label { font-size: clamp(40px, 12.5cqi, 74px); }
 .art-ledger .atlas-label span { color: #8f7000; }
 .art-ledger .atlas-shot { border-color: #241d00; box-shadow: 7px 7px 0 #241d00; }
+.art-forge, .art-forge .atlas-art { background: #e86a33; color: #1c0b03; }
+.art-forge .atlas-label span { color: #fff1e8; }
+.art-forge .atlas-shot { border-color: #1c0b03; box-shadow: 7px 7px 0 #1c0b03; }
 .art-signal { background: #0b1110; }
 .signal-art { position: absolute; inset: 0; background-color: #0b1110; }
 .signal-ring { position: absolute; border: 1px solid #446b37; border-radius: 50% !important; aspect-ratio: 1; left: 50%; top: 52%; transform: translate(-50%, -50%); }
@@ -331,6 +334,15 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .contact-copy { color: var(--fg-2); font-size: 11px; margin: 20px 0 0; }
 .terms { margin-top: 28px; border: 1px solid var(--line-strong); background: var(--panel); box-shadow: 5px 5px 0 var(--shadow); }
 .terms-list { margin: 0; padding: 4px 16px 14px; }
+.terms summary { list-style: none; cursor: pointer; align-items: center; }
+.terms summary::-webkit-details-marker { display: none; }
+.terms:not([open]) summary { border-bottom: 0; }
+.terms summary:hover, .terms summary:focus-visible { background: var(--green-fill); outline: none; }
+.terms summary:hover span, .terms summary:focus-visible span { color: var(--on-green); }
+.terms-toggle { color: var(--fg-2); }
+.terms-sign::before { content: "+"; color: var(--green); }
+.terms[open] .terms-sign::before { content: "−"; }
+.terms summary:hover .terms-sign::before, .terms summary:focus-visible .terms-sign::before { color: var(--on-green); }
 .terms-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .terms-row:last-child { border-bottom: 0; }
 .terms-row dt { color: var(--green); font-size: 8px; letter-spacing: .07em; padding-top: 2px; }
@@ -546,4 +558,5 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 	.atlas-shot { left: 46%; top: 15%; width: 60%; box-shadow: 5px 5px 0 #142008; }
 	.atlas-tag { left: 9%; }
 	.art-ledger .atlas-shot { box-shadow: 5px 5px 0 #241d00; }
+	.art-forge .atlas-shot { box-shadow: 5px 5px 0 #1c0b03; }
 }

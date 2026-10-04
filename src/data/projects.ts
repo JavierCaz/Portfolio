@@ -380,4 +380,231 @@ export const projects: Project[] = [
 			},
 		},
 	},
+	{
+		slug: 'anvil',
+		number: '03',
+		repositoryUrl: 'https://github.com/JavierCaz/anvil',
+		name: { en: 'ANVIL', es: 'ANVIL' },
+		type: { en: 'PRODUCT / MOBILE APP', es: 'PRODUCTO / APLICACIÓN MÓVIL' },
+		stack: ['EXPO SDK 57', 'REACT NATIVE', 'TYPESCRIPT', 'SQLITE', 'VICTORY NATIVE'],
+		cardImage: '/images/projects/anvil/card.webp',
+		cardArt: { label: ['an', 'vil'], tag: { en: 'PRIVATE GYM LOG', es: 'REGISTRO DE GIMNASIO PRIVADO' }, theme: 'art-forge' },
+		cardDescription: {
+			en: 'A privacy-first gym tracker that logs every set, detects personal records, and turns lifted weight into milestones, all stored on the phone.',
+			es: 'Un registro de gimnasio centrado en la privacidad que anota cada serie, detecta récords personales y convierte el peso levantado en logros, todo guardado en el teléfono.',
+		},
+		article: {
+			title: {
+				en: 'Building Anvil: a private, local-first gym tracker that rewards progress',
+				es: 'Construyendo Anvil: un registro de gimnasio privado y local-first que premia el progreso',
+			},
+			dek: {
+				en: 'Workout logging, automatic personal records, and a little gamification, with no account, no cloud, and no tracking.',
+				es: 'Registro de entrenamientos, récords personales automáticos y un poco de gamificación, sin cuentas, sin nube y sin rastreo.',
+			},
+			intro: {
+				en: [
+					'Most workout apps ask for an account before the first set, sync everything to a server, and treat training history as data to be collected. A training log is personal: weights, routines, and the days someone did or did not show up. It does not need to leave the phone to be useful.',
+					'Anvil is a gym tracker built on that idea. It logs routines and sets, detects personal records on its own, and adds just enough gamification to make the next session feel worth it, from “you just lifted a panda” to twelve-week consistency streaks. Everything lives in a SQLite database on the device.',
+				],
+				es: [
+					'La mayoría de las aplicaciones de entrenamiento piden una cuenta antes de la primera serie, sincronizan todo con un servidor y tratan el historial como datos para recolectar. Un registro de entrenamiento es algo personal: pesos, rutinas y los días en que alguien fue o no fue al gimnasio. No necesita salir del teléfono para ser útil.',
+					'Anvil es un registro de gimnasio construido sobre esa idea. Anota rutinas y series, detecta récords personales por sí solo y añade la gamificación justa para que la siguiente sesión valga la pena, desde “acabas de levantar un panda” hasta rachas de constancia de doce semanas. Todo vive en una base de datos SQLite dentro del dispositivo.',
+				],
+			},
+			introImage: {
+				src: '/images/projects/anvil/intro.webp',
+				alt: {
+					en: 'The Anvil wordmark and tagline “Forge your strength. Track your progress.” next to three screens: the home screen with this week’s workouts, an active Leg Day session, and yearly statistics.',
+					es: 'El logotipo de Anvil y el lema “Forge your strength. Track your progress.” junto a tres pantallas: el inicio con los entrenamientos de la semana, una sesión activa de Leg Day y las estadísticas del año.',
+				},
+				caption: {
+					en: 'Anvil: routines, live sessions, records, and statistics, stored entirely on the phone.',
+					es: 'Anvil: rutinas, sesiones en vivo, récords y estadísticas, guardados por completo en el teléfono.',
+				},
+			},
+			sections: {
+				en: [
+					{
+						heading: 'Your training history stays on your phone',
+						blocks: [
+							{ type: 'paragraph', text: 'Privacy is a hard constraint in Anvil, not a setting. There is no sign-up, no sync, no analytics library, and no external API. Routines, exercises, workout sessions, sets, personal records, and achievements live in a local SQLite database, and preferences such as theme, language, units, and weekly goal live in a SQLite-backed key-value store.' },
+							{ type: 'paragraph', text: 'Owning the data also means being able to take it with you. Settings can export everything, including preferences, as a single JSON backup through the share sheet. Importing validates the file’s type, version, and column types before replacing the data in one transaction, so a bad file never leaves the database half-restored.' },
+							{ type: 'image', src: '/images/projects/anvil/local-first.webp', alt: { en: 'Diagram: anvil.db holds nine tables and the kv-store holds the preferences, both on the device, with a crossed-out cloud server. An export arrow leads to a backup.json file with app, type, data, and preferences keys, which can be imported on any phone after validation.', es: 'Diagrama: anvil.db contiene nueve tablas y el kv-store guarda las preferencias, ambos en el dispositivo, con un servidor en la nube tachado. Una flecha de exportación lleva a un archivo backup.json con las claves app, type, data y preferences, que se puede importar en cualquier teléfono después de validarlo.' }, caption: { en: 'Nine tables and a handful of preferences, all on the device; a validated JSON backup is the only way out.', es: 'Nueve tablas y unas cuantas preferencias, todo en el dispositivo; un respaldo JSON validado es la única salida.' } },
+						],
+					},
+					{
+						heading: 'Routines built set by set',
+						blocks: [
+							{ type: 'paragraph', text: 'A routine such as Push Day or Leg Day is a list of exercises, and every exercise carries its own per-set plan: reps, rest time, and an optional target weight. Routines and the exercises inside them can be reordered by dragging and removed with a swipe.' },
+							{ type: 'paragraph', text: 'Exercises come from a bundled catalog of 302 movements with line-art illustrations (Everkinetic artwork, expanded by Bryl Lim under CC BY-SA 4.0), searchable and filterable by muscle group. Anything missing can be added as a custom exercise with its own muscle group, equipment, and type.' },
+							{ type: 'image', src: '/images/projects/anvil/routines.webp', alt: { en: 'Three Anvil screens: the routines list with Push, Pull, and Leg Day; the Push Day routine with five exercises and their sets, reps, and rest; and the Add exercise catalog filtered by muscle group.', es: 'Tres pantallas de Anvil: la lista de rutinas con Push, Pull y Leg Day; la rutina Push Day con cinco ejercicios y sus series, repeticiones y descanso; y el catálogo para añadir ejercicios filtrado por grupo muscular.' }, caption: { en: 'From the routines list to a routine’s exercises and the 302-exercise catalog.', es: 'De la lista de rutinas a los ejercicios de una rutina y al catálogo de 302 ejercicios.' } },
+						],
+					},
+					{
+						heading: 'A session built for the gym floor',
+						blocks: [
+							{ type: 'paragraph', text: 'Starting a routine opens a live session with an elapsed-time stopwatch and progress across exercises. Each set is pre-filled from the plan and adjusted with large steppers whose weight increment is configurable. Marking a set done starts the rest timer; sets can be undone, added, or removed, and exercises can be reordered mid-session.' },
+							{ type: 'paragraph', text: 'Real workouts drift from the plan. When a session ends, Anvil detects whether the set count, set values, or exercise order changed and offers to save those changes back to the routine. An active session also cannot be left by accident: it has to be finished or discarded.' },
+							{ type: 'image', src: '/images/projects/anvil/session.webp', alt: { en: 'Three screens from a live Leg Day session: the exercise list with elapsed time, the Squat set editor with weight and reps steppers, and the same exercise after the first set with a 2:28 rest countdown.', es: 'Tres pantallas de una sesión de Leg Day en vivo: la lista de ejercicios con el tiempo transcurrido, el editor de series de Squat con controles de peso y repeticiones, y el mismo ejercicio tras la primera serie con una cuenta regresiva de descanso de 2:28.' }, caption: { en: 'A live session: exercise progress, the set editor, and the rest countdown after a completed set.', es: 'Una sesión en vivo: el progreso de los ejercicios, el editor de series y la cuenta regresiva de descanso tras completar una serie.' } },
+							{ type: 'paragraph', text: 'The rest timer has to work with the phone in a pocket. Instead of decrementing a counter, it anchors an absolute deadline and schedules a local notification for it. In the foreground the app plays its own chime and vibration and silences the notification; with the screen locked, the operating system delivers the alarm on time, using exact alarms on Android 12 and later. When the app comes back, the countdown catches up to the real remaining time.' },
+							{ type: 'image', src: '/images/projects/anvil/rest-timer.webp', alt: { en: 'Diagram: marking a set done sets a deadline 150 seconds ahead and schedules a local notification. In the foreground the app counts down and plays a chime with three vibration pulses; with the screen locked, the OS plays rest_finished.wav at the deadline. Returning to the app re-syncs the countdown.', es: 'Diagrama: marcar una serie como hecha fija una fecha límite 150 segundos adelante y programa una notificación local. En primer plano la app cuenta hacia atrás y reproduce un timbre con tres vibraciones; con la pantalla bloqueada, el sistema reproduce rest_finished.wav a la hora límite. Al volver a la app la cuenta se resincroniza.' }, caption: { en: 'A deadline, not a counter: the rest alarm rings on time whether the app is open or the screen is locked.', es: 'Una fecha límite, no un contador: la alarma de descanso suena a tiempo con la app abierta o con la pantalla bloqueada.' } },
+						],
+					},
+					{
+						heading: 'Records forged automatically',
+						blocks: [
+							{ type: 'paragraph', text: 'Nobody should have to remember their best squat. When a session ends, Anvil compares each exercise’s best set against every previous completed session and records two kinds of personal record: the heaviest weight, and the best estimated one-rep max using the Epley formula. The estimate only counts sets of 1 to 12 reps, where it is reasonably reliable, and the first session on an exercise never counts as a record.' },
+							{ type: 'paragraph', text: 'The workout recap brings it together: sets, volume and its change against the last time the routine was done, every record forged, milestones unlocked, the distance to the next one, and how the week stands against the weekly goal.' },
+							{ type: 'image', src: '/images/projects/anvil/records.webp', alt: { en: 'The workout recap listing four records forged (weight and 1RM PRs for Squat at 107.5 kg and Leg Press at 200 kg), the Motorcycle milestone, and the next milestone, Grand Piano at 300 kg. Beside it, panels explain PR detection and the Epley formula: 1RM = w × (1 + reps / 30).', es: 'El resumen del entrenamiento con cuatro récords (de peso y de 1RM en Squat con 107.5 kg y Leg Press con 200 kg), el hito Motocicleta y el siguiente hito, Piano de cola con 300 kg. Al lado, paneles explican la detección de récords y la fórmula de Epley: 1RM = w × (1 + reps / 30).' }, caption: { en: 'The recap after a Leg Day, next to the logic that decides what counts as a record.', es: 'El resumen después de un Leg Day, junto a la lógica que decide qué cuenta como récord.' } },
+						],
+					},
+					{
+						heading: 'What am I lifting?',
+						blocks: [
+							{ type: 'paragraph', text: 'Numbers on a bar are abstract, so Anvil translates them. Eight weight milestones run from a watermelon (5 kg) through an adult person (70 kg), a panda (100 kg), and a motorcycle (200 kg) up to a compact car (1,000 kg). Completing a set at or above a threshold unlocks that milestone for the exercise and shows a notification right there in the session.' },
+							{ type: 'paragraph', text: 'Milestones are tracked per exercise, so a panda on the deadlift and a panda on the squat are separate wins, and each milestone’s detail shows which exercises earned it and when.' },
+							{ type: 'image', src: '/images/projects/anvil/milestones.webp', alt: { en: 'The milestone ladder from Watermelon at 5 kg to Compact car at 1,000 kg, with Motorcycle at 200 kg highlighted; the in-session notification “You just lifted Motorcycle! 200 kg · Leg Press”; and the Panda milestone detail earned with Deadlift, Leg Press, and Squat.', es: 'La escalera de hitos desde Sandía con 5 kg hasta Auto compacto con 1,000 kg, con Motocicleta a 200 kg resaltada; la notificación durante la sesión “You just lifted Motorcycle! 200 kg · Leg Press”; y el detalle del hito Panda conseguido con Deadlift, Leg Press y Squat.' }, caption: { en: 'The milestone ladder, the notification that fires mid-session, and a milestone earned on three exercises.', es: 'La escalera de hitos, la notificación que aparece durante la sesión y un hito conseguido en tres ejercicios.' } },
+						],
+					},
+					{
+						heading: 'Achievements that reward showing up',
+						blocks: [
+							{ type: 'paragraph', text: 'Twenty-five achievements are grouped into strength, volume, consistency, experience, and special categories, many of them tiered from bronze to diamond. Volume tiers track cumulative weight × reps per exercise, from a ton up to a million kilograms. Special achievements reward moments: Early Bird before 6 AM, Night Shift after midnight, One More Rep when a set beats its plan, and Perfect Week when the weekly goal is met.' },
+							{ type: 'paragraph', text: 'Consistency is measured in weeks, not days. An early version had a 30-day streak, but rest days are part of training, so it was replaced by consecutive weeks that meet a weekly goal the user sets. An in-progress week never breaks a streak.' },
+							{ type: 'image', src: '/images/projects/anvil/achievements.webp', alt: { en: 'Three screens: the Achievements list with strength milestones, the volume and consistency sections with bronze, silver, gold, and diamond tiers and progress bars, and the home screen showing 3 of 3 workouts this week with recent unlocks.', es: 'Tres pantallas: la lista de logros con los hitos de fuerza, las secciones de volumen y constancia con niveles bronce, plata, oro y diamante y barras de progreso, y el inicio con 3 de 3 entrenamientos esta semana y los logros recientes.' }, caption: { en: 'Achievements by category and tier, and the home screen’s view of the current week.', es: 'Los logros por categoría y nivel, y la vista de la semana actual en el inicio.' } },
+						],
+					},
+					{
+						heading: 'Statistics without the noise',
+						blocks: [
+							{ type: 'paragraph', text: 'The statistics tab answers a few direct questions for the week, month, year, or all time: how many sessions, how much time, the average session length, and the number of completed sets. A donut chart shows which muscle groups received the work, and a bar chart shows training frequency, bucketed by day, week, or month depending on the range.' },
+							{ type: 'paragraph', text: 'Charts are drawn with Victory Native on top of Skia. Every aggregate only counts completed sessions and completed sets, so a discarded or in-progress workout never skews the numbers.' },
+							{ type: 'image', src: '/images/projects/anvil/statistics.webp', alt: { en: 'The Statistics tab for the year: 39 sessions, 38.1 hours, 59-minute average, 624 sets, a muscle distribution donut chart, and a workouts-per-month bar chart. A side panel lists how each range is bucketed.', es: 'La pestaña de estadísticas del año: 39 sesiones, 38.1 horas, 59 minutos de promedio, 624 series, una gráfica de dona con la distribución muscular y una gráfica de barras de entrenamientos por mes. Un panel lateral indica cómo se agrupa cada rango.' }, caption: { en: 'A year of training at a glance, with chart bucketing that adapts to the selected range.', es: 'Un año de entrenamiento de un vistazo, con gráficas que se agrupan según el rango elegido.' } },
+						],
+					},
+					{
+						heading: 'Under the hood',
+						blocks: [
+							{ type: 'paragraph', text: 'Anvil is built with Expo SDK 57, React Native 0.86, and React 19 with the React Compiler, in strict TypeScript. Expo Router provides file-based navigation with typed routes, and Zustand holds preferences persisted to the SQLite key-value store.' },
+							{ type: 'paragraph', text: 'Data access is plain SQL through expo-sqlite, organized into modules for routines, workouts, statistics, gamification, achievements, and backups. The schema is versioned with PRAGMA user_version and append-only migrations, eleven so far, and every derivation, from PR detection to consistency streaks, is computed from the workout data itself.' },
+							{ type: 'paragraph', text: 'A Jest suite of 80 tests covers workouts, records, achievements, statistics, and backup validation, plus a parity test that fails if any translation key is missing in one language. EAS builds development, preview, and production variants with distinct package names, so all three can be installed side by side on the same phone.' },
+							{ type: 'image', src: '/images/projects/anvil/architecture.webp', alt: { en: 'Diagram: Expo Router screens call src/db modules that run plain SQL on anvil.db through expo-sqlite, versioned by PRAGMA user_version with migrations v1 to v11. Side panels list Zustand preferences persisted to the kv-store, 80 Jest tests with a locale parity check, and the toolchain: Expo SDK 57, React Native 0.86, React 19.2, and EAS variants.', es: 'Diagrama: las pantallas de Expo Router llaman a módulos de src/db que ejecutan SQL directo sobre anvil.db mediante expo-sqlite, versionado con PRAGMA user_version y migraciones v1 a v11. Paneles laterales enumeran las preferencias de Zustand guardadas en el kv-store, 80 pruebas de Jest con verificación de paridad de traducciones y las herramientas: Expo SDK 57, React Native 0.86, React 19.2 y variantes de EAS.' }, caption: { en: 'From screen to SQLite in three layers, with preferences, tests, and builds alongside.', es: 'De la pantalla a SQLite en tres capas, con preferencias, pruebas y compilaciones a un lado.' } },
+						],
+					},
+					{
+						heading: 'Two languages, two unit systems, two themes',
+						blocks: [
+							{ type: 'paragraph', text: 'The interface is available in English and Spanish, following the device language or a manual choice. Weights can be shown in kilograms or pounds; the database always stores kilograms and converts only at the display and input boundary, so switching units never rewrites history. Light and dark themes follow the system or can be set explicitly.' },
+							{ type: 'image', src: '/images/projects/anvil/languages.webp', alt: { en: 'Three screens in Spanish with the light theme: Settings with Español and Imperial selected and a 5 lb weight increment, an active Push Day session, and the home screen.', es: 'Tres pantallas en español con el tema claro: la configuración con Español e Imperial seleccionados y un incremento de 5 lb, una sesión activa de Push Day y la pantalla de inicio.' }, caption: { en: 'Spanish, imperial units, and the light theme, all switched from Settings.', es: 'Español, unidades imperiales y tema claro, todo desde la configuración.' } },
+						],
+					},
+					{
+						heading: 'What I want to explore next',
+						blocks: [
+							{ type: 'paragraph', text: 'These ideas are on the roadmap and are not implemented yet:' },
+							{ type: 'list', items: [
+								'Per-exercise progress charts: weight, volume, and estimated one-rep max over time.',
+								'Sharing achievements and milestones as images that reveal nothing personal.',
+								'A level system based on total volume and completed workouts.',
+								'Daily and weekly goals for individual exercises.',
+								'Spreadsheet (CSV) export alongside the JSON backup.',
+								'A one-time Pro purchase for advanced analytics and custom achievements, with no ads and no subscription.',
+							] },
+						],
+					},
+				],
+				es: [
+					{
+						heading: 'Tu historial se queda en tu teléfono',
+						blocks: [
+							{ type: 'paragraph', text: 'En Anvil la privacidad es una regla, no una opción. No hay registro, sincronización, bibliotecas de analítica ni APIs externas. Rutinas, ejercicios, sesiones, series, récords personales y logros viven en una base de datos SQLite local, y preferencias como el tema, el idioma, las unidades y la meta semanal se guardan en un almacén clave-valor respaldado por SQLite.' },
+							{ type: 'paragraph', text: 'Ser dueño de los datos también significa poder llevártelos. Desde la configuración se puede exportar todo, incluidas las preferencias, en un solo respaldo JSON mediante el menú para compartir. Al importar se validan el tipo, la versión y los tipos de cada columna antes de reemplazar los datos en una sola transacción, así un archivo dañado nunca deja la base de datos a medio restaurar.' },
+							{ type: 'image', src: '/images/projects/anvil/local-first.webp', alt: { en: 'Diagram: anvil.db holds nine tables and the kv-store holds the preferences, both on the device, with a crossed-out cloud server. An export arrow leads to a backup.json file with app, type, data, and preferences keys, which can be imported on any phone after validation.', es: 'Diagrama: anvil.db contiene nueve tablas y el kv-store guarda las preferencias, ambos en el dispositivo, con un servidor en la nube tachado. Una flecha de exportación lleva a un archivo backup.json con las claves app, type, data y preferences, que se puede importar en cualquier teléfono después de validarlo.' }, caption: { en: 'Nine tables and a handful of preferences, all on the device; a validated JSON backup is the only way out.', es: 'Nueve tablas y unas cuantas preferencias, todo en el dispositivo; un respaldo JSON validado es la única salida.' } },
+						],
+					},
+					{
+						heading: 'Rutinas construidas serie por serie',
+						blocks: [
+							{ type: 'paragraph', text: 'Una rutina como Push Day o Leg Day es una lista de ejercicios, y cada ejercicio lleva su propio plan por serie: repeticiones, tiempo de descanso y un peso objetivo opcional. Las rutinas y sus ejercicios se reordenan arrastrándolos y se eliminan deslizando.' },
+							{ type: 'paragraph', text: 'Los ejercicios vienen de un catálogo incluido con 302 movimientos ilustrados (arte de Everkinetic, ampliado por Bryl Lim bajo CC BY-SA 4.0), con búsqueda y filtro por grupo muscular. Lo que falte se puede añadir como ejercicio personalizado con su propio grupo muscular, equipo y tipo.' },
+							{ type: 'image', src: '/images/projects/anvil/routines.webp', alt: { en: 'Three Anvil screens: the routines list with Push, Pull, and Leg Day; the Push Day routine with five exercises and their sets, reps, and rest; and the Add exercise catalog filtered by muscle group.', es: 'Tres pantallas de Anvil: la lista de rutinas con Push, Pull y Leg Day; la rutina Push Day con cinco ejercicios y sus series, repeticiones y descanso; y el catálogo para añadir ejercicios filtrado por grupo muscular.' }, caption: { en: 'From the routines list to a routine’s exercises and the 302-exercise catalog.', es: 'De la lista de rutinas a los ejercicios de una rutina y al catálogo de 302 ejercicios.' } },
+						],
+					},
+					{
+						heading: 'Una sesión pensada para el gimnasio',
+						blocks: [
+							{ type: 'paragraph', text: 'Al iniciar una rutina se abre una sesión en vivo con un cronómetro y el progreso de los ejercicios. Cada serie viene precargada desde el plan y se ajusta con controles grandes cuyo incremento de peso es configurable. Marcar una serie como hecha inicia el temporizador de descanso; las series se pueden deshacer, añadir o eliminar, y los ejercicios se pueden reordenar a mitad de la sesión.' },
+							{ type: 'paragraph', text: 'Los entrenamientos reales se alejan del plan. Al terminar, Anvil detecta si cambiaron el número de series, sus valores o el orden de los ejercicios, y ofrece guardar esos cambios en la rutina. Además, una sesión activa no se puede abandonar por accidente: hay que terminarla o descartarla.' },
+							{ type: 'image', src: '/images/projects/anvil/session.webp', alt: { en: 'Three screens from a live Leg Day session: the exercise list with elapsed time, the Squat set editor with weight and reps steppers, and the same exercise after the first set with a 2:28 rest countdown.', es: 'Tres pantallas de una sesión de Leg Day en vivo: la lista de ejercicios con el tiempo transcurrido, el editor de series de Squat con controles de peso y repeticiones, y el mismo ejercicio tras la primera serie con una cuenta regresiva de descanso de 2:28.' }, caption: { en: 'A live session: exercise progress, the set editor, and the rest countdown after a completed set.', es: 'Una sesión en vivo: el progreso de los ejercicios, el editor de series y la cuenta regresiva de descanso tras completar una serie.' } },
+							{ type: 'paragraph', text: 'El temporizador de descanso tiene que funcionar con el teléfono en el bolsillo. En lugar de descontar un contador, fija una hora límite absoluta y programa una notificación local para ese momento. En primer plano la app reproduce su propio timbre y vibración y silencia la notificación; con la pantalla bloqueada, el sistema operativo entrega la alarma a tiempo, usando alarmas exactas en Android 12 o posterior. Al volver a la app, la cuenta regresiva se pone al día con el tiempo real restante.' },
+							{ type: 'image', src: '/images/projects/anvil/rest-timer.webp', alt: { en: 'Diagram: marking a set done sets a deadline 150 seconds ahead and schedules a local notification. In the foreground the app counts down and plays a chime with three vibration pulses; with the screen locked, the OS plays rest_finished.wav at the deadline. Returning to the app re-syncs the countdown.', es: 'Diagrama: marcar una serie como hecha fija una fecha límite 150 segundos adelante y programa una notificación local. En primer plano la app cuenta hacia atrás y reproduce un timbre con tres vibraciones; con la pantalla bloqueada, el sistema reproduce rest_finished.wav a la hora límite. Al volver a la app la cuenta se resincroniza.' }, caption: { en: 'A deadline, not a counter: the rest alarm rings on time whether the app is open or the screen is locked.', es: 'Una fecha límite, no un contador: la alarma de descanso suena a tiempo con la app abierta o con la pantalla bloqueada.' } },
+						],
+					},
+					{
+						heading: 'Récords que se forjan solos',
+						blocks: [
+							{ type: 'paragraph', text: 'Nadie debería tener que recordar su mejor sentadilla. Al terminar una sesión, Anvil compara la mejor serie de cada ejercicio con todas las sesiones completadas anteriores y registra dos tipos de récord personal: el mayor peso y la mejor estimación de una repetición máxima con la fórmula de Epley. La estimación solo considera series de 1 a 12 repeticiones, donde es razonablemente confiable, y la primera sesión de un ejercicio nunca cuenta como récord.' },
+							{ type: 'paragraph', text: 'El resumen del entrenamiento lo reúne todo: series, volumen y su cambio frente a la última vez que se hizo la rutina, cada récord conseguido, los hitos desbloqueados, la distancia al siguiente y cómo va la semana frente a la meta semanal.' },
+							{ type: 'image', src: '/images/projects/anvil/records.webp', alt: { en: 'The workout recap listing four records forged (weight and 1RM PRs for Squat at 107.5 kg and Leg Press at 200 kg), the Motorcycle milestone, and the next milestone, Grand Piano at 300 kg. Beside it, panels explain PR detection and the Epley formula: 1RM = w × (1 + reps / 30).', es: 'El resumen del entrenamiento con cuatro récords (de peso y de 1RM en Squat con 107.5 kg y Leg Press con 200 kg), el hito Motocicleta y el siguiente hito, Piano de cola con 300 kg. Al lado, paneles explican la detección de récords y la fórmula de Epley: 1RM = w × (1 + reps / 30).' }, caption: { en: 'The recap after a Leg Day, next to the logic that decides what counts as a record.', es: 'El resumen después de un Leg Day, junto a la lógica que decide qué cuenta como récord.' } },
+						],
+					},
+					{
+						heading: '¿Qué estoy levantando?',
+						blocks: [
+							{ type: 'paragraph', text: 'Los números en una barra son abstractos, así que Anvil los traduce. Ocho hitos de peso van desde una sandía (5 kg), pasando por una persona adulta (70 kg), un panda (100 kg) y una motocicleta (200 kg), hasta un auto compacto (1,000 kg). Completar una serie igual o por encima de un umbral desbloquea ese hito para el ejercicio y muestra una notificación ahí mismo, durante la sesión.' },
+							{ type: 'paragraph', text: 'Los hitos se registran por ejercicio, así que un panda en peso muerto y un panda en sentadilla son logros distintos, y el detalle de cada hito muestra con qué ejercicios se consiguió y cuándo.' },
+							{ type: 'image', src: '/images/projects/anvil/milestones.webp', alt: { en: 'The milestone ladder from Watermelon at 5 kg to Compact car at 1,000 kg, with Motorcycle at 200 kg highlighted; the in-session notification “You just lifted Motorcycle! 200 kg · Leg Press”; and the Panda milestone detail earned with Deadlift, Leg Press, and Squat.', es: 'La escalera de hitos desde Sandía con 5 kg hasta Auto compacto con 1,000 kg, con Motocicleta a 200 kg resaltada; la notificación durante la sesión “You just lifted Motorcycle! 200 kg · Leg Press”; y el detalle del hito Panda conseguido con Deadlift, Leg Press y Squat.' }, caption: { en: 'The milestone ladder, the notification that fires mid-session, and a milestone earned on three exercises.', es: 'La escalera de hitos, la notificación que aparece durante la sesión y un hito conseguido en tres ejercicios.' } },
+						],
+					},
+					{
+						heading: 'Logros que premian la constancia',
+						blocks: [
+							{ type: 'paragraph', text: 'Veinticinco logros se agrupan en las categorías de fuerza, volumen, constancia, experiencia y especiales, muchos de ellos con niveles de bronce a diamante. Los niveles de volumen siguen el peso × repeticiones acumulado por ejercicio, desde una tonelada hasta un millón de kilos. Los especiales premian momentos: Madrugador antes de las 6 AM, Turno Nocturno después de medianoche, Una Repetición Más cuando una serie supera lo planeado y Semana Perfecta al cumplir la meta semanal.' },
+							{ type: 'paragraph', text: 'La constancia se mide en semanas, no en días. Una versión temprana tenía una racha de 30 días, pero el descanso también es parte del entrenamiento, así que se reemplazó por semanas consecutivas que cumplen una meta semanal elegida por cada persona. Una semana en curso nunca rompe la racha.' },
+							{ type: 'image', src: '/images/projects/anvil/achievements.webp', alt: { en: 'Three screens: the Achievements list with strength milestones, the volume and consistency sections with bronze, silver, gold, and diamond tiers and progress bars, and the home screen showing 3 of 3 workouts this week with recent unlocks.', es: 'Tres pantallas: la lista de logros con los hitos de fuerza, las secciones de volumen y constancia con niveles bronce, plata, oro y diamante y barras de progreso, y el inicio con 3 de 3 entrenamientos esta semana y los logros recientes.' }, caption: { en: 'Achievements by category and tier, and the home screen’s view of the current week.', es: 'Los logros por categoría y nivel, y la vista de la semana actual en el inicio.' } },
+						],
+					},
+					{
+						heading: 'Estadísticas sin ruido',
+						blocks: [
+							{ type: 'paragraph', text: 'La pestaña de estadísticas responde unas cuantas preguntas directas para la semana, el mes, el año o todo el historial: cuántas sesiones, cuánto tiempo, la duración promedio y el número de series completadas. Una gráfica de dona muestra qué grupos musculares recibieron el trabajo y una gráfica de barras muestra la frecuencia de entrenamiento, agrupada por día, semana o mes según el rango.' },
+							{ type: 'paragraph', text: 'Las gráficas se dibujan con Victory Native sobre Skia. Cada cálculo solo cuenta sesiones y series completadas, así un entrenamiento descartado o en curso nunca altera los números.' },
+							{ type: 'image', src: '/images/projects/anvil/statistics.webp', alt: { en: 'The Statistics tab for the year: 39 sessions, 38.1 hours, 59-minute average, 624 sets, a muscle distribution donut chart, and a workouts-per-month bar chart. A side panel lists how each range is bucketed.', es: 'La pestaña de estadísticas del año: 39 sesiones, 38.1 horas, 59 minutos de promedio, 624 series, una gráfica de dona con la distribución muscular y una gráfica de barras de entrenamientos por mes. Un panel lateral indica cómo se agrupa cada rango.' }, caption: { en: 'A year of training at a glance, with chart bucketing that adapts to the selected range.', es: 'Un año de entrenamiento de un vistazo, con gráficas que se agrupan según el rango elegido.' } },
+						],
+					},
+					{
+						heading: 'Bajo el capó',
+						blocks: [
+							{ type: 'paragraph', text: 'Anvil está construida con Expo SDK 57, React Native 0.86 y React 19 con React Compiler, en TypeScript estricto. Expo Router ofrece navegación basada en archivos con rutas tipadas, y Zustand guarda las preferencias en el almacén clave-valor de SQLite.' },
+							{ type: 'paragraph', text: 'El acceso a datos es SQL directo mediante expo-sqlite, organizado en módulos para rutinas, entrenamientos, estadísticas, gamificación, logros y respaldos. El esquema se versiona con PRAGMA user_version y migraciones que solo se añaden, once hasta ahora, y cada cálculo, desde la detección de récords hasta las rachas de constancia, se deriva de los propios datos de entrenamiento.' },
+							{ type: 'paragraph', text: 'Una suite de 80 pruebas con Jest cubre entrenamientos, récords, logros, estadísticas y la validación de respaldos, además de una prueba de paridad que falla si falta alguna clave de traducción en un idioma. EAS genera variantes de desarrollo, prueba y producción con nombres de paquete distintos, así las tres se pueden instalar al mismo tiempo en el mismo teléfono.' },
+							{ type: 'image', src: '/images/projects/anvil/architecture.webp', alt: { en: 'Diagram: Expo Router screens call src/db modules that run plain SQL on anvil.db through expo-sqlite, versioned by PRAGMA user_version with migrations v1 to v11. Side panels list Zustand preferences persisted to the kv-store, 80 Jest tests with a locale parity check, and the toolchain: Expo SDK 57, React Native 0.86, React 19.2, and EAS variants.', es: 'Diagrama: las pantallas de Expo Router llaman a módulos de src/db que ejecutan SQL directo sobre anvil.db mediante expo-sqlite, versionado con PRAGMA user_version y migraciones v1 a v11. Paneles laterales enumeran las preferencias de Zustand guardadas en el kv-store, 80 pruebas de Jest con verificación de paridad de traducciones y las herramientas: Expo SDK 57, React Native 0.86, React 19.2 y variantes de EAS.' }, caption: { en: 'From screen to SQLite in three layers, with preferences, tests, and builds alongside.', es: 'De la pantalla a SQLite en tres capas, con preferencias, pruebas y compilaciones a un lado.' } },
+						],
+					},
+					{
+						heading: 'Dos idiomas, dos sistemas de unidades, dos temas',
+						blocks: [
+							{ type: 'paragraph', text: 'La interfaz está disponible en inglés y español, según el idioma del dispositivo o una elección manual. Los pesos se pueden mostrar en kilos o libras; la base de datos siempre guarda kilos y convierte solo al mostrar o capturar valores, así cambiar de unidades nunca reescribe el historial. Los temas claro y oscuro siguen al sistema o se pueden elegir de forma explícita.' },
+							{ type: 'image', src: '/images/projects/anvil/languages.webp', alt: { en: 'Three screens in Spanish with the light theme: Settings with Español and Imperial selected and a 5 lb weight increment, an active Push Day session, and the home screen.', es: 'Tres pantallas en español con el tema claro: la configuración con Español e Imperial seleccionados y un incremento de 5 lb, una sesión activa de Push Day y la pantalla de inicio.' }, caption: { en: 'Spanish, imperial units, and the light theme, all switched from Settings.', es: 'Español, unidades imperiales y tema claro, todo desde la configuración.' } },
+						],
+					},
+					{
+						heading: 'Lo que quiero explorar después',
+						blocks: [
+							{ type: 'paragraph', text: 'Estas ideas están en la hoja de ruta, pero todavía no están implementadas:' },
+							{ type: 'list', items: [
+								'Gráficas de progreso por ejercicio: peso, volumen y repetición máxima estimada a lo largo del tiempo.',
+								'Compartir logros e hitos como imágenes que no revelen nada personal.',
+								'Un sistema de niveles basado en el volumen total y los entrenamientos completados.',
+								'Metas diarias y semanales para ejercicios individuales.',
+								'Exportación a hoja de cálculo (CSV) junto al respaldo JSON.',
+								'Una compra única Pro con analítica avanzada y logros personalizados, sin anuncios y sin suscripción.',
+							] },
+						],
+					},
+				],
+			},
+		},
+	},
 ];
