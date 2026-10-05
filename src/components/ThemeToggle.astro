@@ -20,11 +20,27 @@
 		document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor[theme]);
 	};
 
+	const systemTheme = matchMedia('(prefers-color-scheme: light)');
+	const system = () => (systemTheme.matches ? 'light' : 'dark');
+	const saved = () => {
+		try { return localStorage.getItem('portfolio-theme'); } catch { return null; }
+	};
+
 	document.querySelectorAll('[data-theme-toggle]').forEach((button) => button.addEventListener('click', () => {
 		root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
-		try { localStorage.setItem('portfolio-theme', root.dataset.theme); } catch {}
+		// Picking the system's own theme drops the override, so the page follows the OS again.
+		try {
+			if (root.dataset.theme === system()) localStorage.removeItem('portfolio-theme');
+			else localStorage.setItem('portfolio-theme', root.dataset.theme);
+		} catch {}
 		render();
 	}));
+	// Without an explicit choice, track OS changes live (e.g. automatic dark mode at sunset).
+	systemTheme.addEventListener('change', () => {
+		if (saved()) return;
+		root.dataset.theme = system();
+		render();
+	});
 	// Both pages switch language by setting <html lang>, so follow that instead of coupling to each page's i18n code.
 	new MutationObserver(render).observe(root, { attributes: true, attributeFilter: ['lang'] });
 	render();

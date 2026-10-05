@@ -1,6 +1,7 @@
 ---
 /**
- * On English pages only: send visitors who chose Spanish (or whose browser prefers it) to the Spanish URL.
+ * On English pages only: send visitors who chose Spanish, or who most likely read it, to the Spanish URL.
+ * Order: saved choice > browser's first language (if en/es) > country (set by the worker as <html data-country>) > English.
  * Crawlers get the English page as-is and reach /es/ through the hreflang links, so both versions stay indexable.
  */
 interface Props {
@@ -11,8 +12,12 @@ const { to } = Astro.props;
 ---
 
 <script is:inline define:vars={{ to }}>
+	const spanishCountries = ['AR', 'BO', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'ES', 'GQ', 'GT', 'HN', 'MX', 'NI', 'PA', 'PE', 'PR', 'PY', 'SV', 'UY', 'VE'];
 	let saved;
 	try { saved = localStorage.getItem('portfolio-language'); } catch {}
-	const browser = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-	if (saved === 'es' || (saved !== 'en' && /^es(-|$)/i.test(browser))) location.replace(to + location.hash);
+	const browser = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+	const browserLang = /^(en|es)(-|$)/.exec(browser)?.[1];
+	const country = document.documentElement.dataset.country;
+	const lang = saved === 'en' || saved === 'es' ? saved : browserLang || (spanishCountries.includes(country) ? 'es' : 'en');
+	if (lang === 'es') location.replace(to + location.hash);
 </script>

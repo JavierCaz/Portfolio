@@ -1,5 +1,5 @@
 // Cloudflare Worker. Static files in dist/ are served by the assets binding;
-// only /api/* reaches this script (see run_worker_first in wrangler.jsonc).
+// only /api/* and the English pages reach this script (see run_worker_first in wrangler.jsonc).
 // POST /api/contact verifies Turnstile, then forwards the message via Resend.
 
 import { budgetLabel, isCurrency } from '../src/data/budget';
@@ -125,6 +125,24 @@ const handleContact = async (request: Request, env: Env) => {
 	return json({ ok: true });
 };
 
+// Workers runtime global; declared here because the project doesn't pull in @cloudflare/workers-types.
+declare const HTMLRewriter: {
+	new (): {
+		on(selector: string, handlers: { element(element: { setAttribute(name: string, value: string): void }): void }): {
+			transform(response: Response): Response;
+		};
+	};
+};
+
+// English pages route through here so LanguageRedirect can also use the visitor's country,
+// exposed as <html data-country="MX">. The page stays static; only the attribute is added.
+const tagCountry = async (request: Request, env: Env) => {
+	const response = await env.ASSETS.fetch(request);
+	const country = (request as Request & { cf?: { country?: string } }).cf?.country ?? '';
+	if (!/^[A-Z]{2}$/.test(country) || !response.headers.get('content-type')?.includes('text/html')) return response;
+	return new HTMLRewriter().on('html', { element: (html) => html.setAttribute('data-country', country) }).transform(response);
+};
+
 export default {
 	async fetch(request: Request, env: Env) {
 		const { pathname } = new URL(request.url);
@@ -132,6 +150,7 @@ export default {
 			if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
 			return handleContact(request, env);
 		}
+		if (!pathname.startsWith('/api/')) return tagCountry(request, env);
 		return env.ASSETS.fetch(request);
 	},
 };
