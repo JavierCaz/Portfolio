@@ -50,7 +50,7 @@ const structuredData = {
 	</head>
 	<body>
 		<header class="site-header">
-			<a class="wordmark" href={`${home}#top`} aria-label="Javier Cazares, home"><Logo size={34} /></a>
+			<a class="wordmark" href={`${home}#top`} aria-label="Javier Cazares, home"><Logo size={32} /></a>
 			<div class="header-prompt"><span class="prompt-symbol">›</span> javier@dev-environment:~/projects/{project.slug}$</div>
 			<nav aria-label={t('Project navigation', 'Navegación del proyecto')}>
 				<a href={`${home}#work`}>{t('[ ALL WORK ]', '[ PROYECTOS ]')}</a>
@@ -106,7 +106,7 @@ const structuredData = {
 			</div>
 		</main>
 
-		<footer class="site-footer shell"><a class="footer-mark" href={`${home}#top`} aria-label="Javier Cazares, home"><Logo size={26} /></a><span>{t('MADE WITH INTENTION & A LOT OF COFFEE.', 'HECHO CON INTENCIÓN Y MUCHO CAFÉ.')}</span><SocialLinks compact /><a href="#top" class="back-top">{t('BACK TO TOP ↑', 'VOLVER ARRIBA ↑')}</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
+		<footer class="site-footer shell"><a class="footer-mark" href={`${home}#top`} aria-label="Javier Cazares, home"><Logo size={24} /></a><span set:html={t('MADE WITH INTENTION &amp; A LOT OF <del>COFFEE</del> TEA.', 'HECHO CON INTENCIÓN Y MUCHO <del>CAFÉ</del> TÉ.')} /><SocialLinks compact /><a href="#top" class="back-top">{t('BACK TO TOP ↑', 'VOLVER ARRIBA ↑')}</a><span class="copyright">© 2026 JAVIER CAZARES</span></footer>
 		<TerminalCursor />
 	</body>
 </html>

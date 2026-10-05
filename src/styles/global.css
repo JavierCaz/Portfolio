@@ -81,12 +81,20 @@ button, a, textarea { border-radius: 0; }
 
 .site-header { min-height: 60px; padding: 0 max(40px, calc((100vw - 1180px) / 2)); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 24px; background: var(--bg); }
 .wordmark, .footer-mark { display: inline-flex; line-height: 0; }
-.logo-shadow, .logo-cursor { fill: var(--green); }
-.logo-tile { fill: var(--bg); stroke: var(--fg); }
-.logo-glyphs { fill: var(--fg); }
-.wordmark:hover .logo-tile, .footer-mark:hover .logo-tile { fill: var(--green-fill); stroke: var(--green-fill); }
-.wordmark:hover .logo-glyphs, .footer-mark:hover .logo-glyphs, .wordmark:hover .logo-cursor, .footer-mark:hover .logo-cursor { fill: var(--on-green); }
-.wordmark:hover .logo-shadow, .footer-mark:hover .logo-shadow { fill: var(--fg); }
+.logo-tile { fill: var(--green-fill); }
+.logo-glyphs { fill: var(--bg); }
+/* Hover inverts the cursor block from accent to foreground. */
+.wordmark:hover .logo-tile, .footer-mark:hover .logo-tile { fill: var(--fg); }
+/* Navbar only: viewfinder corner ticks frame the mark like a selected element on the blueprint grid. */
+.wordmark { position: relative; justify-self: start; padding: 5px; outline: none; }
+.wordmark::before {
+	content: ""; position: absolute; inset: 0; pointer-events: none;
+	--tick: linear-gradient(var(--tick-color) 0 0); --tick-color: var(--fg-2);
+	background: var(--tick) top left / 7px 1px, var(--tick) top left / 1px 7px, var(--tick) top right / 7px 1px, var(--tick) top right / 1px 7px,
+		var(--tick) bottom left / 7px 1px, var(--tick) bottom left / 1px 7px, var(--tick) bottom right / 7px 1px, var(--tick) bottom right / 1px 7px;
+	background-repeat: no-repeat;
+}
+.wordmark:hover::before, .wordmark:focus-visible::before { --tick-color: var(--green); }
 .header-prompt { color: var(--fg-2); font-size: 11px; letter-spacing: .015em; }
 .prompt-symbol { color: var(--green); margin-right: 7px; }
 .site-header nav { display: flex; align-items: center; gap: 20px; }
@@ -423,6 +431,7 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 .form-bottom > span { color: var(--muted); font-size: 8px; }
 .form-bottom button { border: 1px solid var(--green); background: var(--green-fill); color: var(--on-green); cursor: pointer; padding: 10px 12px; font-size: 8px; font-weight: 700; letter-spacing: .04em; box-shadow: 3px 3px 0 var(--green-shadow); }
 .form-bottom button:hover { background: var(--bg); color: var(--green); }
+.site-footer del { color: var(--dim); text-decoration-thickness: 1px; }
 .site-footer { min-height: 63px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 18px; color: var(--muted); font-size: 8px; }
 .back-top { padding: 5px; }
 .social-links { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -503,7 +512,7 @@ h2 { font-size: clamp(30px, 4vw, 43px); line-height: 1.15; letter-spacing: -.09e
 }
 @media (max-width: 600px) {
 	.shell { width: calc(100% - 36px); }
-	.site-header { min-height: 57px; padding-inline: 18px; grid-template-columns: 30px 1fr; }
+	.site-header { min-height: 57px; padding-inline: 18px; padding-top: 10px; grid-template-columns: 42px 1fr; }
 	.header-prompt { text-align: right; font-size: 9px; }
 	.site-header nav { grid-column: 1 / -1; flex-wrap: wrap; justify-content: space-between; gap: 8px 10px; border-top: 1px solid var(--line); padding: 8px 0; }
 	.site-header nav a { font-size: 9px; }

@@ -69,8 +69,8 @@ Author: Javier Cazares</pre>
 						{entry.tags && <p class="show-tags">{entry.tags.map((tag) => <span>[ {tag} ]</span>)}</p>}
 					</div>
 					<div class="career-nav">
-						<button type="button" data-step="1" disabled={index === careerLog.length - 1}>{t('← OLDER', '← ANTERIOR')}</button>
-						<button type="button" data-step="-1" disabled={index === 0}>{t('NEWER →', 'RECIENTE →')}</button>
+						<button type="button" data-step="1" disabled={index === careerLog.length - 1}>{t('← PREVIOUS', '← ANTERIOR')}</button>
+						<button type="button" data-step="-1" disabled={index === 0}>{t('NEXT →', 'SIGUIENTE →')}</button>
 					</div>
 				</article>
 			))}

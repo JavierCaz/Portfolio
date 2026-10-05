@@ -30,7 +30,7 @@ const en = {
 	contactIndex: '05 / YOUR TURN', contactStatus: 'OPEN TO GOOD IDEAS', contactCommand: './say-hello', contactTitle: 'Got a good<br />one',
 	contactCopy: 'A project, a question, a half-formed thought.<br />I’m listening.', ideaLabel: '&gt; SYSTEM READY. DROP YOUR IDEA BELOW:',
 	ideaPlaceholder: 'I’ve been thinking about...', formHelp: 'GOES STRAIGHT TO MY INBOX.', sendNote: '[ EXECUTE SEND', emailLabel: '&gt; REPLY TO:',
-	footerMade: 'MADE WITH INTENTION &amp; A LOT OF COFFEE.', backTop: 'BACK TO TOP ↑',
+	footerMade: 'MADE WITH INTENTION &amp; A LOT OF <del>COFFEE</del> TEA.', backTop: 'BACK TO TOP ↑',
 	formMessages: {
 		sending: 'TRANSMITTING...', sent: 'RECEIVED. I’LL GET BACK TO YOU.', captcha: 'VERIFICATION PENDING. TRY AGAIN IN A SECOND.', failed: 'SEND FAILED. YOUR NOTE WAS COPIED — EMAIL IT TO ME.',
 		email: 'I NEED A VALID EMAIL TO REPLY.',
@@ -94,7 +94,7 @@ const es: typeof en = {
 	contactIndex: '05 / TU TURNO', contactStatus: 'ABIERTO A BUENAS IDEAS', contactCommand: './di-hola', contactTitle: '¿Tienes una<br />buena idea',
 	contactCopy: 'Un proyecto, una pregunta, una idea a medio formar.<br />Te leo.', ideaLabel: '&gt; SISTEMA LISTO. CUÉNTAME TU IDEA:',
 	ideaPlaceholder: 'He estado pensando en...', formHelp: 'LLEGA DIRECTO A MI BANDEJA.', sendNote: '[ EJECUTAR ENVÍO', emailLabel: '&gt; RESPONDER A:',
-	footerMade: 'HECHO CON INTENCIÓN Y MUCHO CAFÉ.', backTop: 'VOLVER ARRIBA ↑',
+	footerMade: 'HECHO CON INTENCIÓN Y MUCHO <del>CAFÉ</del> TÉ.', backTop: 'VOLVER ARRIBA ↑',
 	formMessages: {
 		sending: 'TRANSMITIENDO...', sent: 'RECIBIDO. TE RESPONDO PRONTO.', captcha: 'VERIFICACIÓN PENDIENTE. INTENTA DE NUEVO EN UN SEGUNDO.', failed: 'FALLÓ EL ENVÍO. TU MENSAJE SE COPIÓ — ENVÍAMELO POR CORREO.',
 		email: 'NECESITO UN CORREO VÁLIDO PARA RESPONDERTE.',
