@@ -94,19 +94,21 @@ For local testing, copy [`.env.example`](.env.example) to `.env` and [`.dev.vars
 
 The site is deployed as a Cloudflare Worker with static assets, on the `javiercazares.dev` and `www.javiercazares.dev` custom domains.
 
-### Automatic (GitHub Actions)
+### Automatic (Cloudflare Workers Builds)
 
-Every push to `main` triggers [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the site and runs `wrangler deploy`. This includes merged pull requests. You can also start a deploy by hand from the **Actions** tab ("Run workflow").
+The `portfolio` Worker is connected to this repository through Cloudflare's Git integration. Every push to `main` (merged pull requests included) is built and deployed by Cloudflare. Pushes to other branches upload a preview version without touching production. Builds, logs and settings live in the Cloudflare dashboard under **Workers & Pages → portfolio → Settings → Build**.
 
-The workflow needs these settings in the repository (**Settings → Secrets and variables → Actions**):
+The build needs one **build variable** (**Settings → Build → Variables and secrets**). Build variables are separate from the Worker's runtime secrets below:
 
-| Name                        | Type     | Value                                                         |
-| :-------------------------- | :------- | :------------------------------------------------------------ |
-| `CLOUDFLARE_API_TOKEN`      | Secret   | API token created from the "Edit Cloudflare Workers" template |
-| `CLOUDFLARE_ACCOUNT_ID`     | Secret   | Your Cloudflare account ID                                    |
-| `PUBLIC_TURNSTILE_SITE_KEY` | Variable | Production Turnstile site key, built into the site            |
+| Name                        | Value                                              |
+| :-------------------------- | :------------------------------------------------- |
+| `PUBLIC_TURNSTILE_SITE_KEY` | Production Turnstile site key, built into the site |
+
+If it is missing, the build silently falls back to Cloudflare's test key: the widget shows "For testing only" and every submission fails verification.
 
 ### Manual
+
+Put the production site key in `.env` first. Without it, the build falls back to the test key, just as above.
 
 ```sh
 npm run build
